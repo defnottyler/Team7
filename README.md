@@ -1,1 +1,2 @@
-# Team7
+# Project Team 7 
+# Semester long programming project
