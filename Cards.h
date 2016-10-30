@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 
 using namespace std;
@@ -56,4 +58,6 @@ SpecialCard::SpecialCard(int eff, string name)
 :Card(false, name), effect(eff)
 {
 }
+
+
 
