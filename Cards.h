@@ -20,18 +20,19 @@ Card::Card(bool unit, string n)
 class UnitCard: public Card
 {
 	public:
-		UnitCard(int strength, int typ, int abilit, bool hero, string name, int str);
+		UnitCard(int typ, int abilit, bool hero, string name, int str);
 		int getStrength();
 		void setStrength(int s);
 		const int type;
 		const int ability;
 		const bool isHero;
 		const int strength; //This is the base
+		string toString();
 	private:
 		int currentStrength;
 };
 
-UnitCard::UnitCard(int strength, int typ, int abilit, bool hero, string name, int str)
+UnitCard::UnitCard(int typ, int abilit, bool hero, string name, int str)
 :Card(true, name), isHero(hero), type(typ), ability(abilit), strength(str)
 {
 	currentStrength = strength;
@@ -45,6 +46,11 @@ int UnitCard::getStrength()
 void UnitCard::setStrength(int s)
 {
 	currentStrength = s;
+}
+
+string UnitCard::toString()
+{
+	cout <<name<<" "<<type<<" "<<ability<<" "<<isHero<<" "<<strength<<endl;
 }
 
 class SpecialCard: public Card
