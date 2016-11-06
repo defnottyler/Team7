@@ -11,22 +11,28 @@ using namespace std;
 class BoardRow
 {
 	public:
-		BoardRow(int pos);
+		//BoardRow(int pos);
+		BoardRow();
 		vector<UnitCard> cards;
-		const int rowPosition;
+		void setRow(int pos);
 		//void applyModifier(int effect);
 	private:
 		//void deBuff();
 		//void buff();
+		int rowPosition;
 		bool buffed;
 		bool deBuffed;
 		int rowStrength;
 };
  
-BoardRow::BoardRow(int pos)
-:rowPosition(pos)
+BoardRow::BoardRow()
 {
 	rowStrength = 0;
+}
+
+void BoardRow::setRow(int pos)
+{
+	rowPosition = pos;
 }
 
  
@@ -42,8 +48,8 @@ class Board
 		//void endOfGame(); //Called when one or both player's points hit zero
 		//void printBoard();
 	private:
-		//BoardRow playerOneRows[3];
-		//BoardRow playerTwoRows[3];
+		BoardRow playerOneRows[3];
+		BoardRow playerTwoRows[3];
 		vector<UnitCard> playerOneDeck;
 		vector<Card> playerTwoDeck;
 		vector<Card> playerOneHand;
@@ -65,9 +71,11 @@ class Board
 
 Board::Board()
 {
-	//playerOneRows = {new BoardRow(0), new BoardRow(1), new BoardRow(2)};
-	//playerTwoRows = {new BoardRow(0), new BoardRow(1), new BoardRow(2)};
-	//playerOneDeck.reserve(10);
+	for (int i = 0; i < 3; i++)
+	{
+		playerOneRows[i].setRow(i);
+		playerTwoRows[i].setRow(i);
+	}
 	p1Points = 0;
 	p2Points = 0;
 	p1TotalStrength = 0;
