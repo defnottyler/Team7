@@ -91,7 +91,7 @@ void Board::initializeDecks()
 			index = line.find(" ", 5);
 			name = line.substr(5, index - 5);
 			index++;
-			strength = stoi(line.substr(index, 1));
+			strength = stoi(line.substr(index, 2));
 			index = line.find(" ", index) + 1;
 			range = stoi(line.substr(index, 1));
 			index =line.find(" ", index) + 1;
