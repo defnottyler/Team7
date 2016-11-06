@@ -3,7 +3,7 @@ Card format in text file:
 
 Example:
 
-true Poor_Infantry 1 close 0 false
+true Poor_Infantry 1 0 0 false
 
 This card is a unit card with the name "Poor_Infantry", a strength
 of one, close range, no ability, and is not a hero card.
