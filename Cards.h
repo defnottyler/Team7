@@ -10,6 +10,9 @@ class Card
 		Card(bool unit, string n);
 		const bool isUnit;
 		const string name;
+		virtual int getStrength() = 0;
+		virtual void setStrength(int s) = 0;
+		virtual string toString() = 0;
 };
 
 Card::Card(bool unit, string n)
@@ -58,11 +61,29 @@ class SpecialCard: public Card
 	public:
 		SpecialCard(int eff, string name);
 		const int effect;
+		int getStrength();
+		void setStrength(int s);
+		string toString();
 };
 
 SpecialCard::SpecialCard(int eff, string name)
 :Card(false, name), effect(eff)
 {
+}
+
+int SpecialCard::getStrength()
+{
+	return -1;
+}
+
+void SpecialCard::setStrength(int s)
+{
+	//Polymorphic placeholder
+}
+
+string SpecialCard::toString()
+{
+	cout <<name<<endl;
 }
 
 

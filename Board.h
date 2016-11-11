@@ -50,21 +50,20 @@ class Board
 	private:
 		BoardRow playerOneRows[3];
 		BoardRow playerTwoRows[3];
-		vector<UnitCard> playerOneDeck;
-		vector<Card> playerTwoDeck;
-		vector<Card> playerOneHand;
-		vector<Card> playerTwoHand;
-		vector<Card> playerOneGrave;
-		vector<Card> playerTwoGrave;
+		vector<Card*> playerOneDeck;
+		vector<Card*> playerTwoDeck;
+		vector<Card*> playerOneHand;
+		vector<Card*> playerTwoHand;
+		vector<Card*> playerOneGrave;
+		vector<Card*> playerTwoGrave;
 		int p1Points;
 		int p2Points;
 		int p1TotalStrength;
 		int p2TotalStrength;
 		int boardMod;
 		bool turn;
-		void initializeDecks();
+		void initializeDecks(string filename, bool p);
 		//void pullHand(); //Fills each hand with 10 cards at start of game
-		//void initializeCards(); //Intializes both player's decks.
 		//void killCards(); //Places cards in used pile
 		//void changeModifier();
 }; 
@@ -81,12 +80,13 @@ Board::Board()
 	p1TotalStrength = 0;
 	p2TotalStrength = 0;
 	boardMod = 0;
-	initializeDecks();
+	initializeDecks("deckone.txt", true);
+	initializeDecks("decktwo.txt", false);
 }
 
-void Board::initializeDecks()
+void Board::initializeDecks(string filename, bool p)
 {
-	ifstream d_one("deckone.txt");
+	ifstream d_one(filename);
 	string line;
 	string name;
 	bool hero = false;
@@ -107,12 +107,22 @@ void Board::initializeDecks()
 			index = line.find(" ", index) + 1;
 			if (line.substr(index, 4) == "true")
 				hero = true;
-			UnitCard card(range, ability, hero, name, strength);
-			//playerOneDeck.push_back(new UnitCard(range, ability, hero, name, strength));
-			playerOneDeck.push_back(card);
+			//UnitCard card(range, ability, hero, name, strength);
+			if (p)
+				playerOneDeck.push_back(new UnitCard(range, ability, hero, name, strength));
+			else
+				playerTwoDeck.push_back(new UnitCard(range, ability, hero, name, strength));
+			//playerOneDeck.push_back(card);
 		}
 		else
 		{
+			index = line.find(" ", 6);
+			name = line.substr(6, index - 6);
+			ability = stoi(line.substr(index + 1, 1));
+			if (p)
+				playerOneDeck.push_back(new SpecialCard(ability, name));
+			else
+				playerTwoDeck.push_back(new SpecialCard(ability, name));
 		}
 	}
 	d_one.close();
@@ -122,6 +132,6 @@ void Board::printCards()
 {
 	for (int i = 0; i < playerOneDeck.size(); i++)
 	{
-		playerOneDeck.at(i).toString();
+		playerOneDeck.at(i)->toString();
 	}
 }
