@@ -2,6 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <ctime>
 #include "Cards.h"
 //#include "UnitCard.h"
 //#include "SpecialCard.h"
@@ -41,6 +42,9 @@ class Board
 	public:
 		Board(); //Constructor starts entire game and configures board.
 		void printCards();
+		void handGenerator();
+		int chooseTurn();
+		void printHand();
 		//bool playCard(); //Puts a card on the field and changes player's turn
 		//void startGame();
 		//void startRound(); //Called at start of each round
@@ -61,6 +65,9 @@ class Board
 		int p1TotalStrength;
 		int p2TotalStrength;
 		int boardMod;
+		int firstTurnChoice;
+		int roundCount;
+		bool pass;
 		bool turn;
 		void initializeDecks(string filename, bool p);
 		//void pullHand(); //Fills each hand with 10 cards at start of game
@@ -82,6 +89,8 @@ Board::Board()
 	boardMod = 0;
 	initializeDecks("deckone.txt", true);
 	initializeDecks("decktwo.txt", false);
+	handGenerator();
+	
 }
 
 void Board::initializeDecks(string filename, bool p)
@@ -128,10 +137,82 @@ void Board::initializeDecks(string filename, bool p)
 	d_one.close();
 }
 
+void Board::handGenerator()			//puts cards from deck into player hand(s)
+{
+	srand(time(NULL));
+	
+	int deckSize1 = playerOneDeck.size();
+	int deckSize2 = playerTwoDeck.size();
+	
+	int index1;
+	int index2;
+	
+	for(int i=0; i<10; i++) {
+		
+		index1 = rand() % deckSize1;
+		index2 = rand() % deckSize2;
+		
+		playerOneHand.push_back(playerOneDeck.at(index1));
+		playerOneDeck.erase(playerOneDeck.begin()+index1-1);
+		deckSize1--;
+		
+		playerTwoHand.push_back(playerTwoDeck.at(index2));
+		playerTwoDeck.erase(playerTwoDeck.begin()+index2-1);
+		deckSize2--;
+		//hands are now generated
+	}
+}
+
+int Board::chooseTurn() 
+{
+	srand(time(NULL));
+	firstTurnChoice = rand() % 2;
+	return firstTurnChoice;
+}
+/*
+void Board::play()
+{
+	bool isPlayerOneTurn;
+	
+	if(roundCount == 1) {
+		if(firstTurnChoice == 0) {
+		isPlayerOneTurn == TRUE;
+		}
+		else {
+		isPlayerOneTurn == FALSE;
+		}
+	}
+	
+	
+}
+
+void Board::playerOneTurn()
+{
+	
+	
+	
+}
+
+void Board::playerTwoTurn()
+{
+	
+	
+}
+*/
+
+
 void Board::printCards()
 {
 	for (int i = 0; i < playerOneDeck.size(); i++)
 	{
 		playerOneDeck.at(i)->toString();
+	}
+}
+
+void Board::printHand()
+{
+	for (int i = 0; i < playerOneHand.size(); i++)
+	{
+		playerOneHand.at(i)->toString();
 	}
 }
