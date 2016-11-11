@@ -14,12 +14,15 @@ class BoardRow
 	public:
 		//BoardRow(int pos);
 		BoardRow();
-		vector<UnitCard> cards;
+		vector<UnitCard*> cards;
 		void setRow(int pos);
-		//void applyModifier(int effect);
+		void applyModifier(int effect);
+		int getRowStr();
 	private:
-		//void deBuff();
-		//void buff();
+		void deBuff();
+		void buff();
+		void clear();
+		//void calcStr();
 		int rowPosition;
 		bool buffed;
 		bool deBuffed;
@@ -35,6 +38,68 @@ void BoardRow::setRow(int pos)
 {
 	rowPosition = pos;
 }
+
+void BoardRow::applyModifier(int effect)
+{
+	switch (effect)
+	{
+		case 0:
+			clear();
+			break;
+		case 1:
+			buff();
+			break;
+		case 2:
+			deBuff();
+			break;
+	}
+}
+
+void BoardRow::clear()
+{
+	rowStrength = 0;
+	for (int i = 0; i < cards.size(); i++)
+	{
+		if (!cards.at(i)->isHero)
+			cards.at(i)->setStrength(cards.at(i)->strength);
+		rowStrength += cards.at(i)->getStrength();
+	}
+	buffed = false;
+	deBuffed = false;
+}
+
+void BoardRow::deBuff()
+{
+	rowStrength = 0;
+	for (int i = 0; i < cards.size(); i++)
+	{
+		if (!cards.at(i)->isHero && !buffed)
+			cards.at(i)->setStrength(1);
+		else if (!cards.at(i)->isHero && buffed)
+			cards.at(i)->setStrength(2);
+		rowStrength += cards.at(i)->getStrength();
+	}
+	deBuffed = true;
+}
+
+void BoardRow::buff()
+{
+	rowStrength = 0;
+	for (int i = 0; i < cards.size(); i++)
+	{
+		if (!cards.at(i)->isHero && !deBuffed)
+			cards.at(i)->setStrength(cards.at(i)->strength * 2);
+		else if (!cards.at(i)->isHero && deBuffed)
+			cards.at(i)->setStrength(2);
+		rowStrength += cards.at(i)->getStrength();
+	}
+}
+
+int BoardRow::getRowStr()
+{
+	return rowStrength;
+}
+
 
  
 class Board 
