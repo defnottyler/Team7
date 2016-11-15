@@ -110,6 +110,9 @@ class Board
 		void handGenerator();
 		int chooseTurn();
 		void printHand();
+		void play();
+		int playerOneTurn();
+		int playerTwoTurn();
 		//bool playCard(); //Puts a card on the field and changes player's turn
 		//void startGame();
 		//void startRound(); //Called at start of each round
@@ -130,10 +133,11 @@ class Board
 		int p1TotalStrength;
 		int p2TotalStrength;
 		int boardMod;
+		bool isFirstTurn;
 		int firstTurnChoice;
+		int playerTurn;
 		int roundCount;
 		bool pass;
-		bool turn;
 		void initializeDecks(string filename, bool p);
 		//void pullHand(); //Fills each hand with 10 cards at start of game
 		//void killCards(); //Places cards in used pile
@@ -152,6 +156,7 @@ Board::Board()
 	p1TotalStrength = 0;
 	p2TotalStrength = 0;
 	boardMod = 0;
+	isFirstTurn = TRUE;
 	initializeDecks("deckone.txt", true);
 	initializeDecks("decktwo.txt", false);
 	handGenerator();
@@ -231,39 +236,41 @@ void Board::handGenerator()			//puts cards from deck into player hand(s)
 int Board::chooseTurn() 
 {
 	srand(time(NULL));
-	firstTurnChoice = rand() % 2;
+	firstTurnChoice = (rand() % 2) + 1;
 	return firstTurnChoice;
 }
-/*
+
 void Board::play()
 {
-	bool isPlayerOneTurn;
-	
-	if(roundCount == 1) {
-		if(firstTurnChoice == 0) {
-		isPlayerOneTurn == TRUE;
-		}
-		else {
-		isPlayerOneTurn == FALSE;
-		}
+	if(isFirstTurn) {
+		playerTurn = chooseTurn();
 	}
 	
-	
+	do{
+		if(playerTurn == 1) {
+			playerOneTurn();
+		}
+		else {
+			
+		}
+	}while(gameIsNOtOver);
 }
 
-void Board::playerOneTurn()
+int Board::playerOneTurn()
 {
 	
 	
 	
 }
 
-void Board::playerTwoTurn()
+int Board::playerTwoTurn()
 {
 	
 	
 }
-*/
+
+void 
+
 
 
 void Board::printCards()
