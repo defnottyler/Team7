@@ -111,8 +111,10 @@ class Board
 		int chooseTurn();
 		void printHand();
 		void play();
-		int playerOneTurn();
-		int playerTwoTurn();
+		void displayTurnOptions();
+		int playerTurn(vector<*Card> playerDeck, bool playerPass, bool otherPass);//My version of the Turn method. Combines the two.
+		//int playerOneTurn();
+		//int playerTwoTurn();
 		//bool playCard(); //Puts a card on the field and changes player's turn
 		//void startGame();
 		//void startRound(); //Called at start of each round
@@ -137,6 +139,8 @@ class Board
 		int firstTurnChoice;
 		int playerTurn;
 		int roundCount;
+		bool p1Pass; //when true, prevents this player from having a turn for the rest of the round
+		bool p2Pass; //
 		bool pass;
 		void initializeDecks(string filename, bool p);
 		//void pullHand(); //Fills each hand with 10 cards at start of game
@@ -256,60 +260,84 @@ void Board::play()
 	}while(gameIsNOtOver);
 }
 
-int Board::playerOneTurn()
-{	
-	int playerOneOption = 0;
-	
-	
-	 do {
-		cout << "Choose a card or Pass." << endl;
-		turnOptions(); //prints out a list of options the player can do during his turn
-		cin >> playerOneOption; //takes in the option the player chose 
-		if(playerOneOption == 1){ // 1 is play card
-
-		playCard(index in hand);
-		}
-		elseif(playerOneOption == 2){ // 2 is pass
-			playerTurn == 0;
-		}
-		else {
-			cout << "Not a valid option!" << endl;
-		}
-	
-	} while(playerOneOption != 0 || playerOneOption != 1)
-	
-	
-}
-
-int Board::playerTwoTurn()
+/*
+  Displays what a player can do during their turn.
+ */
+void Board::displayTurnOptions()
 {
-		int playerTwoOption = 0;
-	
-	
-	 do {
-		cout << "Choose a card or Pass." << endl;
-		turnOptions(); //prints out a list of options the player can do during his turn
-		cin >> playerTwoOption; //takes in the option the player chose 
-		if(playerTwoOption == 1){ // 1 is play card
+	cout << "Choose one of the following options:" << endl;
+	cout << "1) Play a card" << endl;
+	cout << "2) Pass turn" << endl;
+	cout << "Player Option: ";
+}
 
-		playCard(index in hand);
-		}
-		elseif(playerTwoOption == 2){ // 2 is pass
-			playerTurn == 1;
-		}
-		else {
-			cout << "Not a valid option!" << endl;
-		}
+/*
+  Makes sure that user inputs a valid input for what they want to do on their turn.
+  Returns the option selected when it is valid.
+  
+  param: void
+  return: int - the valid user option
+ */
+int Board::getUserOption()
+{
+	string input;
+	int option = -1;
 	
-	} while(playerTwoOption != 0 || playerTwoOption != 1)
+	do {
+		displayTurnOptions();
+		cin >> input;
 	
+		//assigns value to option for valid input
+		if()
+		{
+			option = input;
+		}
+		
+		//informs user of invalid input
+		else
+		{
+			cout << "Your input is not correct. Please pick either \"1\" or \"2\"." << endl;
+		}
+	} while(); //keep doing this until valid input is obtained
+	
+	return option;
+	
+}
+	
+
+/*
+  Allows a given player perform any actions they can during their turn.
+  
+  param: vector<*Card> playerDeck - the deck of cards associated with the current player
+  		       bool &playerPass - once the current player passes, this variable is updated to true
+		       bool otherPass - used to check if the other player has already passed
+  return: int - what is this int?
+ */
+int Board::playerTurn(vector<*Card> playerDeck, bool &playerPass, bool otherPass)
+{
+	int playerOption = 0;
+	
+	do {
+		playerOption = getUserOption();
+		
+		//Player selects a card to play
+		if(playerOption == 1)
+		{
+			//Not sure how to implement this yet
+			//Needs to switch turns if the other player has not passed yet
+			
+			if()
+		}
+		
+		else if(playerOption == 2)
+		{
+			playerPass = true;
+		}
+		
+	} while(playerOption != 2);
 	
 	
 }
-
-
-
-
 
 void Board::printCards()
 {
