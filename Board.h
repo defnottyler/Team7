@@ -276,10 +276,10 @@ void Board::displayTurnOptions()
   Makes sure that user inputs a valid input for what they want to do on their turn.
   Returns the option selected when it is valid.
   
-  param: int upperBound - the highest int value allowed to perform a selection
+  param: void
   return: int - the valid user option
  */
-int Board::getUserOption(int upperBound)
+int Board::getUserOption()
 {
 	string input;
 	int option = -1;
