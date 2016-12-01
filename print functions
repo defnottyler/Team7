@@ -1,0 +1,71 @@
+void Board::printCards(int p)
+{
+	if (p==1){
+		for (int i = 0; i < playerOneDeck.size(); i++){
+		playerOneDeck.at(i)->toString();
+		}
+	}
+	else{
+		for (int j = 0; j < playerTwoDeck.size(); j++){
+		playerTwoDeck.at(j)->toString();
+		}
+	}
+}
+
+void Board::printHand(int p)
+{
+	if (p==1){
+		for (int i = 0; i < playerOneHand.size(); i++){
+			playerOneHand.at(i)->toString();
+			cout<<"-----";
+		}
+	}
+	else{
+		for (int j = 0; j < playerOneHand.size(); j++){
+			playerTwoHand.at(j)->toString();
+			cout<<"-----";
+		}
+	}
+}
+
+void Board::printBoard(int p)
+{
+	if(p==1){
+		cout<<"~~~~~~~~~~~~GAMING BOARD~~~~~~~~~~~~\n";
+		cout<<"Other player's Siege cards: \n";
+		//display playerTwoRows[2]
+		cout<<"Other player's Ranged cards: \n";
+		//display playerTwoRows[1]
+		cout<<"Other player's Close Combat cards: \n";
+		//display playerTwoRows[0]
+		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+		cout<<"Your Close Combat cards: \n";
+		//display playerOneRows[0]
+		cout<<"Your Ranged cards: \n";
+		//display playerOneRows[1]
+		cout<<"Your Siege cards: \n";
+		//display playerOneRows[2]
+		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+		cout<<"Your hand: \n"
+		printHand(1);
+	}
+	else{
+		cout<<"~~~~~~~~~~~~GAMING BOARD~~~~~~~~~~~~\n";
+		cout<<"Other player's Siege cards: \n";
+		//display playerTwoRows[2]
+		cout<<"Other player's Ranged cards: \n";
+		//display playerTwoRows[1]
+		cout<<"Other player's Close Combat cards: \n";
+		//display playerTwoRows[0]
+		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+		cout<<"Your Close Combat cards: \n";
+		//display playerOneRows[0]
+		cout<<"Your Ranged cards: \n";
+		//display playerOneRows[1]
+		cout<<"Your Siege cards: \n";
+		//display playerOneRows[2]
+		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+		cout<<"Your hand: \n"
+		printHand(2);
+	}
+}
