@@ -112,6 +112,7 @@ class Board
 		void printHand();
 		void play();
 		void displayTurnOptions();
+		int getPlayerOption(); //Input validation
 		int playerTurn(vector<*Card> playerDeck, bool playerPass, bool otherPass);//My version of the Turn method. Combines the two.
 		//int playerOneTurn();
 		//int playerTwoTurn();
@@ -275,10 +276,10 @@ void Board::displayTurnOptions()
   Makes sure that user inputs a valid input for what they want to do on their turn.
   Returns the option selected when it is valid.
   
-  param: void
+  param: int upperBound - the highest int value allowed to perform a selection
   return: int - the valid user option
  */
-int Board::getUserOption()
+int Board::getUserOption(int upperBound)
 {
 	string input;
 	int option = -1;
@@ -296,12 +297,11 @@ int Board::getUserOption()
 		//informs user of invalid input
 		else
 		{
-			cout << "Your input is not correct. Please pick either \"1\" or \"2\"." << endl;
+			cout << "Your input is not correct." << endl;
 		}
-	} while(); //keep doing this until valid input is obtained
+	} while(option < 0); //keep doing this until valid input is obtained
 	
-	return option;
-	
+	return option;	
 }
 	
 
@@ -315,27 +315,32 @@ int Board::getUserOption()
  */
 int Board::playerTurn(vector<*Card> playerDeck, bool &playerPass, bool otherPass)
 {
-	int playerOption = 0;
+	int playerOption = getUserOption();
 	
-	do {
-		playerOption = getUserOption();
+	//Player selects a card to play
+	if(playerOption == 1)
+	{
+		//Not sure how to implement this yet
+		//Needs to switch turns if the other player has not passed yet
 		
-		//Player selects a card to play
-		if(playerOption == 1)
+		//selects a card to play based on user selection
+		playCard(playerDeck);
+		
+		//if other player has not passed, change turn
+		if()
 		{
-			//Not sure how to implement this yet
-			//Needs to switch turns if the other player has not passed yet
-			
-			if()
 		}
-		
-		else if(playerOption == 2)
-		{
-			playerPass = true;
-		}
-		
-	} while(playerOption != 2);
+		//if other player has passed, do not switch turn
+		else
+	}
 	
+	else if(playerOption == 2)
+	{
+		playerPass = true;
+		
+		//code to determine if round ends?
+		//determine the first turn for the next round?
+	}
 	
 }
 
