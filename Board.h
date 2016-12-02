@@ -19,12 +19,12 @@ public:
 	BoardRow();
 	vector<UnitCard*> cards;
 	void setRow(int pos);
-	void applyModifier(int effect);
+	//void applyModifier(int effect);
 	int getRowStr();
+    void deBuff();
+    void buff();
+    void clear();
 private:
-	void deBuff();
-	void buff();
-	void clear();
 	//void calcStr();
 	int rowPosition;
 	bool buffed;
@@ -34,28 +34,14 @@ private:
 
 BoardRow::BoardRow()
 {
+    buffed = false;
+    deBuffed = false;
 	rowStrength = 0;
 }
 
 void BoardRow::setRow(int pos)
 {
 	rowPosition = pos;
-}
-
-void BoardRow::applyModifier(int effect)
-{
-	switch (effect)
-	{
-	case 0:
-		clear();
-		break;
-	case 1:
-		buff();
-		break;
-	case 2:
-		deBuff();
-		break;
-	}
 }
 
 void BoardRow::clear()
@@ -67,7 +53,7 @@ void BoardRow::clear()
 			cards.at(i)->setStrength(cards.at(i)->strength);
 		rowStrength += cards.at(i)->getStrength();
 	}
-	buffed = false;
+	//buffed = false;
 	deBuffed = false;
 }
 
@@ -96,10 +82,14 @@ void BoardRow::buff()
 			cards.at(i)->setStrength(2);
 		rowStrength += cards.at(i)->getStrength();
 	}
+    buffed = true;
 }
 
 int BoardRow::getRowStr()
 {
+    rowStrength = 0;
+    for (UnitCard* c : cards)
+        rowStrength += c->getStrength();
 	return rowStrength;
 }
 
@@ -338,24 +328,48 @@ void Board::playerTwoTurn()
 void Board::playCard(int index, vector<Card*> playerHand, bool pl) {
 	int cardRow;
     int ability;
-	UnitCard *currentCard;
+	UnitCard *uCard;
+    SpecialCard *sCard;
 	if(playerHand.at(index) -> isUnit)
     {
-		currentCard = (UnitCard*)playerHand.at(index);
-        cardRow = currentCard->type;
-        ability = currentCard->ability;
-        switch (cardRow)
-        {
-                if (!pl)
-                    playerOneRows[cardRow].cards.push_back(currentCard);
-                else
-                    playerTwoRows[cardRow].cards.push_back(currentCard);
-                //TODO: implement ability
-        }
+		uCard = (UnitCard*)playerHand.at(index);
+        cardRow = uCard->type;
+        ability = uCard->ability;
+        if (!pl)
+            playerOneRows[cardRow].cards.push_back(uCard);
+        else
+            playerTwoRows[cardRow].cards.push_back(uCard);
+        //TODO: implement ability
+        playerHand.erase(playerHand.begin() + index - 1);
 	}
     else
     {
-            //Special card procedure
+        sCard = (SpecialCard*)playerHand.at(index);
+        ability = sCard->effect;
+        switch (ability)
+        {
+            case 0:
+                for (int i = 0; i < 3; i++)
+                {
+                    playerOneRows[i].clear();
+                    playerTwoRows[i].clear();
+                }
+                break;
+            case 1:
+                playerOneRows[0].deBuff();
+                playerTwoRows[0].deBuff();
+                break;
+            case 2:
+                playerTwoRows[1].deBuff();
+                playerOneRows[1].deBuff();
+                break;
+            case 3:
+                playerOneRows[2].deBuff();
+                playerTwoRows[2].deBuff();
+                break;
+            case 4:
+                break;
+        }
     }
     
 }
