@@ -117,7 +117,7 @@ public:
 	void playRound(int *p1Score, int *p2Score);
 	void playerOneTurn();
 	void playerTwoTurn();
-	void playCard(int index, vector<Card*> playerHand); //Puts a card on the field and changes player's turn
+	void playCard(int index, vector<Card*> playerHand, bool pl); //Puts a card on the field and changes player's turn
 	void displayTurnOptions();
 	//void startGame();
 	//void startRound(); //Called at start of each round
@@ -419,7 +419,7 @@ void Board::playRound(int *p1Score, int *p2Score)
 	p1Pass = false;
 	p2Pass = false;
 	if (isFirstRound) {
-		playerTurn == chooseTurn();
+		playerTurn = chooseTurn();
 		if (playerTurn == 1) {
 			playerOneTurn();
 			playerTurn = 2;
@@ -449,9 +449,10 @@ void Board::playRound(int *p1Score, int *p2Score)
 	} while(!p1Pass && !p2Pass);
 
 	if (p1TotalStrength > p2TotalStrength)
-		*p1Score++;
+		p1Score++;
 	else
-		*p2Score++;
+		p2Score++;
+    //round has terminated?
 }
 
 void Board::playerOneTurn()
@@ -462,7 +463,7 @@ void Board::playerOneTurn()
 	if (turnOption == 1) {
 		cout << "Select Card to play: ";
 		cin >> cardIndex;
-		playCard(cardIndex, playerOneHand);
+		playCard(cardIndex, playerOneHand, false);
 	}
 	else 
 		p1Pass = true;
@@ -478,7 +479,7 @@ void Board::playerTwoTurn()
 	if (turnOption == 1) {
 		cout << "Select Card to play: ";
 		cin >> cardIndex;
-		playCard(cardIndex, playerTwoHand);
+		playCard(cardIndex, playerTwoHand, true);
 	}
 	else
 		p2Pass = true;
@@ -486,14 +487,30 @@ void Board::playerTwoTurn()
 	playerTurn = 1;
 }
 
-//This method is still getting an error, can someone help!?
-//Polymorphism problem...since Player hand elements
-void Board::playCard(int index, vector<Card*> playerHand) {
+//Now compiles without error
+void Board::playCard(int index, vector<Card*> playerHand, bool pl) {
 	int cardRow;
+    int ability;
 	UnitCard *currentCard;
-	if(playerHand.at(index) -> isUnit) {
-		currentCard = playerHand.at(index);
+	if(playerHand.at(index) -> isUnit)
+    {
+		currentCard = (UnitCard*)playerHand.at(index);
+        cardRow = currentCard->type;
+        ability = currentCard->ability;
+        switch (cardRow)
+        {
+                if (!pl)
+                    playerOneRows[cardRow].cards.push_back(currentCard);
+                else
+                    playerTwoRows[cardRow].cards.push_back(currentCard);
+                //TODO: implement ability
+        }
 	}
+    else
+    {
+            //Special card procedure
+    }
+    
 }
 
 void Board::printBoard(int p)
