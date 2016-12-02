@@ -1,0 +1,83 @@
+void Board::printBoard(int p)
+{
+	if(p==1){
+		cout<<"~~~~~~~~~~~~GAMING BOARD~~~~~~~~~~~~\n";
+		cout<<"~~~~Other player's Siege cards: ~~~~\n";
+		//display playerTwoRows[2]
+		for (int k=0; k < playerTwoRows[2].cards.size; k++){
+		playerTwoRows[2].cards.at(k).toString();
+		}
+		cout<<"~~~~Other player's Ranged cards: ~~~~\n";
+		//display playerTwoRows[1]
+		for (int k=0; k < playerTwoRows[1].cards.size; k++){
+		playerTwoRows[1].cards.at(k).toString();
+		}
+		cout<<"~Other player's Close Combat cards: ~\n";
+		//display playerTwoRows[0]
+		for (int k=0; k < playerTwoRows[0].cards.size; k++){
+		playerTwoRows[0].cards.at(k).toString();
+		}
+		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+		cout<<"Your Close Combat cards: \n";
+		//display playerOneRows[0]
+		for (int k=0; k < playerOneRows[0].cards.size; k++){
+		playerOneRows[0].cards.at(k).toString();
+		}
+		cout<<"Your Ranged cards: \n";
+		//display playerOneRows[1]
+		for (int k=0; k < playerOneRows[1].cards.size; k++){
+		playerOneRows[1].cards.at(k).toString();
+		}
+		cout<<"Your Siege cards: \n";
+		//display playerOneRows[2]
+		for (int k=0; k < playerOneRows[2].cards.size; k++){
+		playerOneRows[2].cards.at(k).toString();
+		}
+		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+		cout<<"Your hand: (Name/Type/Abilit/isHero/Strength)\n";
+		for (int i = 0; i < playerOneHand.size(); i++)
+	{
+		playerOneHand.at(i)->toString();
+	}
+	}
+	else{
+		cout<<"~~~~~~~~~~~~GAMING BOARD~~~~~~~~~~~~\n";
+		cout<<"~~~~Other player's Siege cards: ~~~~\n";
+		//display playerOneRows[2]
+		for (int k=0; k < playerOneRows[2].cards.size; k++){
+		playerOneRows[2].cards.at(k).toString();
+		}
+		cout<<"~~~~Other player's Ranged cards: ~~~~\n";
+		//display playerOneRows[1]
+		for (int k=0; k < playerOneRows[1].cards.size; k++){
+		playerOneRows[1].cards.at(k).toString();
+		}
+		cout<<"~Other player's Close Combat cards: ~\n";
+		//display playerOneRows[0]
+		for (int k=0; k < playerOneRows[0].cards.size; k++){
+		playerOneRows[0].cards.at(k).toString();
+		}
+		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+		cout<<"~~~~~Your Close Combat cards: ~~~~~~\n";
+		//display playerTwoRows[0]
+		for (int k=0; k < playerTwoRows[0].cards.size; k++){
+		playerTwoRows[0].cards.at(k).toString();
+		}
+		cout<<"~~~~~~~~Your Ranged cards: ~~~~~~~~~\n";
+		//display playerTwoRows[1]
+		for (int k=0; k < playerTwoRows[1].cards.size; k++){
+		playerTwoRows[1].cards.at(k).toString();
+		}
+		cout<<"~~~~~~~~~Your Siege cards: ~~~~~~~~~\n";
+		//display playerTwoRows[2]
+		for (int k=0; k < playerTwoRows[2].cards.size; k++){
+		playerTwoRows[2].cards.at(k).toString();
+		}
+		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+		cout<<"Your hand: (Name/Type/Abilit/isHero/Strength)\n";
+		for (int i = 0; i < playerTwoHand.size(); i++)
+	{
+		playerTwoHand.at(i)->toString();
+	}
+	}
+}

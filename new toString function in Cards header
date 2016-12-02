@@ -1,0 +1,4 @@
+void UnitCard::toString()
+{
+	cout <<name<<" "<<type<<" "<<ability<<" "<<isHero<<" "<<currentStrength<<endl;
+}
