@@ -1,3 +1,0 @@
-void Board::printHand(int p)
-{
-}
