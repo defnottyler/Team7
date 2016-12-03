@@ -6,321 +6,66 @@ void Board::displayHand(int p)
   if (p == 1)
   {
     int cardsInHand = playerOneHand.size();
-    int row1Cards = 0;
-    int row2Cards = 0;
     
-    if(cardsInHand > 5)
+    if(cardsInHand == 0)
     {
-      row1Cards = 5;
-      row2Cards = cardsInHand - 5;
-      
-      for(int l = 0; l <= 8 ; l++)
-      {
-        for(int c = 1; c <= row1Cards; c++)
-        {
-          if(l == 1 || l == 8)
-          {
-            cout << "  ^**********************^";
-          }
-          else if(l == 2)
-          {
-            cout << "  ^";
-            printf("                      %2d^", c);
-          }
-          else if(l == 3)
-          {
-            cout << "  ^ ";
-            printf("%-20s                    ^", playerOneHand.at(c)->name);
-          }
-          else if(l == 4)
-          {
-            cout << "  ^ Strength: ";
-            printf("%2d          ^", playerOneHand.at(c)->strength);
-          }
-          else if(l == 5)
-          {
-            cout << "  ^ Ability: ";
-            printf("%d           ^", playerOneHand.at(c)->ability);
-          }
-          else if(l == 6)
-          {
-            if(playerOneHand.at(c)->isHero)
-            {
-              cout << "  ^ Hero Card            ^";
-            {
-            else
-            {
-              cout << "  ^                      ^";
-            }
-          }
-          else if(l == 7)
-          {
-            cout << "  ^                      ^";
-          }
-        }
-        cout << endl;
-      }
-      cout << endl << endl;
-      
-      for(int l = 0; l <= 8 ; l++)
-      {
-        for(int c = 6; c <= row2Cards + 5; c++)
-        {
-          if(l == 1 || l == 8)
-          {
-            cout << "  ^**********************^";
-          }
-          else if(l == 2)
-          {
-            cout << "  ^";
-            printf("                      %2d^", c);
-          }
-          else if(l == 3)
-          {
-            cout << "  ^ ";
-            printf("%-20s                    ^", playerOneHand.at(c)->name);
-          }
-          else if(l == 4)
-          {
-            cout << "  ^ Strength: ";
-            printf("%2d          ^", playerOneHand.at(c)->strength);
-          }
-          else if(l == 5)
-          {
-            cout << "  ^ Ability: ";
-            printf("%d           ^", playerOneHand.at(c)->ability);
-          }
-          else if(l == 6)
-          {
-            if(playerOneHand.at(c)->isHero)
-            {
-              cout << "  ^ Hero Card            ^";
-            {
-            else
-            {
-              cout << "  ^                      ^";
-            }
-          }
-          else if(l == 7)
-          {
-            cout << "  ^                      ^";
-          }
-        }
-        cout << endl;
-      }
+      cout << "You have no more cards to play"
     }
     else
     {
-      row 1 = cardsInHand;
-      
-      for(int l = 0; l <= 8 ; l++)
+      int indices = ceil(cardsInHand / 5);
+      int rowIndices[indices];
+      rowIndices[0] = 1;
+    
+      for(int i = 1; i <= indices; i++)
       {
-        for(int c = 1; c <= row1Cards; c++)
+        if(i < indices)
         {
-          if(l == 1 || l == 8)
-          {
-            cout << "  ^**********************^";
-          }
-          else if(l == 2)
-          {
-            cout << "  ^";
-            printf("                      %2d^", c);
-          }
-          else if(l == 3)
-          {
-            cout << "  ^ ";
-            printf("%-20s                    ^", playerOneHand.at(c)->name);
-          }
-          else if(l == 4)
-          {
-            cout << "  ^ Strength: ";
-            printf("%2d          ^", playerOneHand.at(c)->strength);
-          }
-          else if(l == 5)
-          {
-            cout << "  ^ Ability: ";
-            printf("%d           ^", playerOneHand.at(c)->ability);
-          }
-          else if(l == 6)
-          {
-            if(playerOneHand.at(c)->isHero)
-            {
-              cout << "  ^ Hero Card            ^";
-            {
-            else
-            {
-              cout << "  ^                      ^";
-            }
-          }
-          else if(l == 7)
-          {
-            cout << "  ^                      ^";
-          }
+          rowIndices[i] = 5 * i;
         }
-        cout << endl;
+        if(i == indices)
+        {
+          rowIndices[i] = cardsInHand;
+        }
       }
-      cout << endl;
+      
+      for(int i = 0; i < indices; i++)
+      {
+        printRow(playerOneHand, rowIndices[i], rowIndices[i + 1]);
+      }
     }
-  }
-  
-  //Player 2's hand
+    
+  //Player 2's Hand
   else
   {
     int cardsInHand = playerTwoHand.size();
-    int row1Cards = 0;
-    int row2Cards = 0;
     
-    if(cardsInHand > 5)
+    if(cardsInHand == 0)
     {
-      row1Cards = 5;
-      row2Cards = cardsInHand - 5;
-      
-      for(int l = 0; l <= 8 ; l++)
-      {
-        for(int c = 1; c <= row1Cards; c++)
-        {
-          if(l == 1 || l == 8)
-          {
-            cout << "  ^**********************^";
-          }
-          else if(l == 2)
-          {
-            cout << "  ^";
-            printf("                      %2d^", c);
-          }
-          else if(l == 3)
-          {
-            cout << "  ^ ";
-            printf("%-20s                    ^", playerTwoHand.at(c)->name);
-          }
-          else if(l == 4)
-          {
-            cout << "  ^ Strength: ";
-            printf("%2d          ^", playerTwoHand.at(c)->strength);
-          }
-          else if(l == 5)
-          {
-            cout << "  ^ Ability: ";
-            printf("%d           ^", playerTwoHand.at(c)->ability);
-          }
-          else if(l == 6)
-          {
-            if(playerTwoHand.at(c)->isHero)
-            {
-              cout << "  ^ Hero Card            ^";
-            {
-            else
-            {
-              cout << "  ^                      ^";
-            }
-          }
-          else if(l == 7)
-          {
-            cout << "  ^                      ^";
-          }
-        }
-        cout << endl;
-      }
-      cout << endl << endl;
-      
-      for(int l = 0; l <= 8 ; l++)
-      {
-        for(int c = 6; c <= row2Cards + 5; c++)
-        {
-          if(l == 1 || l == 8)
-          {
-            cout << "  ^**********************^";
-          }
-          else if(l == 2)
-          {
-            cout << "  ^";
-            printf("                      %2d^", c);
-          }
-          else if(l == 3)
-          {
-            cout << "  ^ ";
-            printf("%-20s                    ^", playerTwoHand.at(c)->name);
-          }
-          else if(l == 4)
-          {
-            cout << "  ^ Strength: ";
-            printf("%2d          ^", playerTwoHand.at(c)->strength);
-          }
-          else if(l == 5)
-          {
-            cout << "  ^ Ability: ";
-            printf("%d           ^", playerTwoHand.at(c)->ability);
-          }
-          else if(l == 6)
-          {
-            if(playerTwoHand.at(c)->isHero)
-            {
-              cout << "  ^ Hero Card            ^";
-            {
-            else
-            {
-              cout << "  ^                      ^";
-            }
-          }
-          else if(l == 7)
-          {
-            cout << "  ^                      ^";
-          }
-        }
-        cout << endl;
-      }
+      cout << "You have no more cards to play"
     }
     else
     {
-      row 1 = cardsInHand;
-      
-      for(int l = 0; l <= 8 ; l++)
+      int indices = ceil(cardsInHand / 5);
+      int rowIndices[indices];
+      rowIndices[0] = 1;
+    
+      for(int i = 1; i <= indices; i++)
       {
-        for(int c = 1; c <= row1Cards; c++)
+        if(i < indices)
         {
-          if(l == 1 || l == 8)
-          {
-            cout << "  ^**********************^";
-          }
-          else if(l == 2)
-          {
-            cout << "  ^";
-            printf("                      %2d^", c);
-          }
-          else if(l == 3)
-          {
-            cout << "  ^ ";
-            printf("%-20s                    ^", playerTwoHand.at(c)->name);
-          }
-          else if(l == 4)
-          {
-            cout << "  ^ Strength: ";
-            printf("%2d          ^", playerTwoHand.at(c)->strength);
-          }
-          else if(l == 5)
-          {
-            cout << "  ^ Ability: ";
-            printf("%d           ^", playerTwoHand.at(c)->ability);
-          }
-          else if(l == 6)
-          {
-            if(playerTwoHand.at(c)->isHero)
-            {
-              cout << "  ^ Hero Card            ^";
-            {
-            else
-            {
-              cout << "  ^                      ^";
-            }
-          }
-          else if(l == 7)
-          {
-            cout << "  ^                      ^";
-          }
+          rowIndices[i] = 5 * i;
         }
-        cout << endl;
+        if(i == indices)
+        {
+          rowIndices[i] = cardsInHand;
+        }
       }
-      cout << endl;
+      
+      for(int i = 0; i < indices; i++)
+      {
+        printRow(playerTwoHand, rowIndices[i], rowIndices[i + 1]);
+      }
     }
   }
 }
