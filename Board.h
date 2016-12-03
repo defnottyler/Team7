@@ -1,99 +1,11 @@
-//#ifndef
-//#def SOMENAME
-
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <string>
 #include <ctime>
 #include "Cards.h"
-//#include "UnitCard.h"
-//#include "SpecialCard.h"
-//No longer blows up on compilation.
+#include "BoardRow.h"
 using namespace std;
-
-class BoardRow
-{
-public:
-	//BoardRow(int pos);
-	BoardRow();
-	vector<UnitCard*> cards;
-	void setRow(int pos);
-	//void applyModifier(int effect);
-	int getRowStr();
-    void deBuff();
-    void buff();
-    void clear();
-private:
-	//void calcStr();
-	int rowPosition;
-	bool buffed;
-	bool deBuffed;
-	int rowStrength;
-};
-
-BoardRow::BoardRow()
-{
-    buffed = false;
-    deBuffed = false;
-	rowStrength = 0;
-}
-
-void BoardRow::setRow(int pos)
-{
-	rowPosition = pos;
-}
-
-void BoardRow::clear()
-{
-	rowStrength = 0;
-	for (int i = 0; i < cards.size(); i++)
-	{
-		if (!cards.at(i)->isHero)
-			cards.at(i)->setStrength(cards.at(i)->strength);
-		rowStrength += cards.at(i)->getStrength();
-	}
-	//buffed = false;
-	deBuffed = false;
-}
-
-void BoardRow::deBuff()
-{
-	rowStrength = 0;
-	for (int i = 0; i < cards.size(); i++)
-	{
-		if (!cards.at(i)->isHero && !buffed)
-			cards.at(i)->setStrength(1);
-		else if (!cards.at(i)->isHero && buffed)
-			cards.at(i)->setStrength(2);
-		rowStrength += cards.at(i)->getStrength();
-	}
-	deBuffed = true;
-}
-
-void BoardRow::buff()
-{
-	rowStrength = 0;
-	for (int i = 0; i < cards.size(); i++)
-	{
-		if (!cards.at(i)->isHero && !deBuffed)
-			cards.at(i)->setStrength(cards.at(i)->strength * 2);
-		else if (!cards.at(i)->isHero && deBuffed)
-			cards.at(i)->setStrength(2);
-		rowStrength += cards.at(i)->getStrength();
-	}
-    buffed = true;
-}
-
-int BoardRow::getRowStr()
-{
-    rowStrength = 0;
-    for (UnitCard* c : cards)
-        rowStrength += c->getStrength();
-	return rowStrength;
-}
-
-
 
 class Board
 {
@@ -104,10 +16,10 @@ public:
 	bool chooseTurn();
 	void printHand(int p);
 	void printBoard(int p);
-	void playRound(int *p1Score, int *p2Score);
+	void playRound(int &p1Score, int &p2Score);
 	void playerOneTurn();
 	void playerTwoTurn();
-	void playCard(int index, vector<Card*> playerHand, bool pl); //Puts a card on the field and changes player's turn
+	void playCard(int index, vector<Card*> &playerHand, bool pl); //Puts a card on the field and changes player's turn
 	void displayTurnOptions();
 	//void startGame();
 	//void startRound(); //Called at start of each round
@@ -125,7 +37,6 @@ private:
 	vector<Card*> playerTwoGrave;
 	int p1TotalStrength;
 	int p2TotalStrength;
-	int boardMod;
 	bool isFirstRound;
 	int firstTurnChoice;
 	bool playerTurn;
@@ -134,6 +45,12 @@ private:
 	bool p2Pass;
 	int turnOption;
 	void initializeDecks(string filename, bool p);
+    void ability4(bool pl);
+    void moraleBoost(bool pl, int row);
+    void spy(bool pl);
+    void medic(bool pl);
+    void scorch(bool pl, int row);
+    void clearBoard();
 	//void pullHand(); //Fills each hand with 10 cards at start of game
 	//void killCards(); //Places cards in used pile
 	//void changeModifier();
@@ -149,7 +66,6 @@ Board::Board()
 
 	p1TotalStrength = 0;
 	p2TotalStrength = 0;
-	boardMod = 0;
 	isFirstRound = true;
 
 	initializeDecks("PlayerOneDeck.txt", true);
@@ -248,26 +164,14 @@ void Board::displayTurnOptions()
 	cout << "Player Option: ";
 }
 
-void Board::playRound(int *p1Score, int *p2Score)
+//Remember to update this method when we merge.
+void Board::playRound(int &p1Score, int &p2Score)
 {
 	int roundWinner;
 	p1Pass = false;
 	p2Pass = false;
     if (isFirstRound)
         playerTurn = chooseTurn();
-	/*if (isFirstRound) {
-		playerTurn = chooseTurn();
-		if (playerTurn == 1) {
-			playerOneTurn();
-			playerTurn = 2;
-		}
-		else {
-			playerTwoTurn();
-			playerTurn = 1;
-		}
-		isFirstRound = false;
-	} */
-
 	do {
 		if (playerTurn) {
 			playerOneTurn();
@@ -290,6 +194,31 @@ void Board::playRound(int *p1Score, int *p2Score)
 	else
 		p2Score++;
     //round has terminated?
+    //code for clearing board needed
+    clearBoard();
+}
+
+void Board::clearBoard()
+{
+    int p1cards;
+    int p2cards;
+    for (int i = 0; i < 3; i++)
+    {
+        p1cards = playerOneRows[i].cards.size();
+        for (int j = 0; j < p1cards; j++)
+        {
+            playerOneGrave.push_back(playerOneRows[i].cards.front());
+            playerOneRows[i].cards.erase(playerOneRows[i].cards.begin());
+        }
+        p2cards = playerTwoRows[i].cards.size();
+        for (int j = 0; j < p2cards; j++)
+        {
+            playerTwoGrave.push_back(playerTwoRows[i].cards.front());
+            playerTwoRows[i].cards.erase(playerTwoRows[i].cards.begin());
+        }
+        playerOneRows[i].reset();
+        playerTwoRows[i].reset();
+    }
 }
 
 void Board::playerOneTurn()
@@ -325,7 +254,7 @@ void Board::playerTwoTurn()
 }
 
 //Now compiles without error
-void Board::playCard(int index, vector<Card*> playerHand, bool pl) {
+void Board::playCard(int index, vector<Card*> &playerHand, bool pl) {
 	int cardRow;
     int ability;
 	UnitCard *uCard;
@@ -335,17 +264,41 @@ void Board::playCard(int index, vector<Card*> playerHand, bool pl) {
 		uCard = (UnitCard*)playerHand.at(index);
         cardRow = uCard->type;
         ability = uCard->ability;
-        if (!pl)
+        if (!pl && ability != 2) //player one
             playerOneRows[cardRow].cards.push_back(uCard);
-        else
+        else if (pl && ability != 2)
             playerTwoRows[cardRow].cards.push_back(uCard);
-        //TODO: implement ability
+        switch (ability)
+        {
+            case 1:
+                moraleBoost(pl, cardRow);
+                break;
+            case 2:
+                spy(pl);
+                if (!pl)
+                    playerTwoRows[cardRow].cards.push_back(uCard);
+                else
+                    playerOneRows[cardRow].cards.push_back(uCard);
+                break;
+            case 3:
+                break;
+            case 4:
+                scorch(pl, cardRow);
+                break;
+            case 5:
+                break;
+        }
         playerHand.erase(playerHand.begin() + index - 1);
 	}
     else
     {
         sCard = (SpecialCard*)playerHand.at(index);
         ability = sCard->effect;
+        playerHand.erase(playerHand.begin() + index - 1);
+        if (!pl)
+            playerOneGrave.push_back(sCard);
+        else
+            playerTwoGrave.push_back(sCard);
         switch (ability)
         {
             case 0:
@@ -368,10 +321,104 @@ void Board::playCard(int index, vector<Card*> playerHand, bool pl) {
                 playerTwoRows[2].deBuff();
                 break;
             case 4:
+                ability4(pl);
                 break;
         }
     }
     
+}
+
+void Board::ability4(bool pl)
+{
+    int row;
+    while (true)
+    {
+        cout <<"Which row do you want to rally (1, 2, or 3)?\n";
+        cin >>row;
+        if (row < 1 || row > 3)
+            cout <<"Invalid input, try again.\n";
+        else
+            break;
+    }
+    row--;
+    if (!pl)
+        playerOneRows[row].buff();
+    else
+        playerTwoRows[row].buff();
+}
+
+void Board::moraleBoost(bool pl, int row)
+{
+    if (!pl)
+        playerOneRows[row].moraleBoost();
+    else
+        playerTwoRows[row].moraleBoost();
+}
+
+void Board::spy(bool pl)
+{
+    srand(time(NULL));
+    int index = 0;
+    for (int i = 0; i < 2; i++)
+    {
+        if (!pl)
+        {
+            if (playerOneDeck.size() == 0)
+                break;
+            index = rand() % playerOneDeck.size();
+            playerOneHand.push_back(playerOneDeck.at(index));
+            playerOneDeck.erase(playerOneDeck.begin() + index - 1);
+        }
+        else
+        {
+            if (playerTwoDeck.size() == 0)
+                break;
+            index = rand() % playerTwoDeck.size();
+            playerTwoHand.push_back(playerTwoDeck.at(index));
+            playerTwoDeck.erase(playerTwoDeck.begin() + index - 1);
+        }
+    }
+}
+
+void Board::medic(bool pl) //account for empty grave
+{
+}
+
+void Board::scorch(bool pl, int row)
+{
+    int maxStrength = 0;
+    if (!pl)
+    {
+        for (UnitCard *c : playerTwoRows[row].cards)
+        {
+            if (c->getStrength() > maxStrength)
+                maxStrength = c->getStrength();
+        }
+        for (int i = 0; i < playerTwoRows[row].cards.size(); i++)
+        {
+            if (playerTwoRows[row].cards.at(i)->getStrength() == maxStrength)
+            {
+                playerTwoGrave.push_back(playerTwoRows[row].cards.at(i));
+                playerTwoRows[row].cards.erase(playerTwoRows[row].cards.begin() + i - 1);
+            }
+        }
+    }
+    else
+    {
+        for (UnitCard *c : playerOneRows[row].cards)
+        {
+            if (c->getStrength() > maxStrength)
+                maxStrength = c->getStrength();
+        }
+        for (int i = 0; i < playerOneRows[row].cards.size(); i++)
+        {
+            if (playerOneRows[row].cards.at(i)->getStrength() == maxStrength)
+            {
+                playerOneGrave.push_back(playerOneRows[row].cards.at(i));
+                playerOneRows[row].cards.erase(playerOneRows[row].cards.begin() + i - 1);
+            }
+        }
+    }
 }
 
 void Board::printBoard(int p)
