@@ -13,7 +13,7 @@ void Board::displayHand(int p)
     }
     else
     {
-      int indices = ceil(cardsInHand / 5);
+      int indices = (int)(ceil(cardsInHand / 5));
       int rowIndices[indices];
       rowIndices[0] = 1;
     
@@ -47,7 +47,7 @@ void Board::displayHand(int p)
     }
     else
     {
-      int indices = ceil(cardsInHand / 5);
+      int indices = (int)(ceil(cardsInHand / 5));
       int rowIndices[indices];
       rowIndices[0] = 1;
     
