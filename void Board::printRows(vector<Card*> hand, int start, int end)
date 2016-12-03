@@ -1,0 +1,50 @@
+void Board::printRow(vector<Card*> hand, int start, int end)
+{
+  for(int l = 0; l <= 8 ; l++)
+  {
+    for(int c = start; c <= end; c++)
+    {
+      if(l == 1 || l == 8)
+      {
+        cout << "  ^**********************^";
+      }
+      else if(l == 2)
+      {
+        cout << "  ^";
+        printf("                      %2d^", c);
+      }
+      else if(l == 3)
+      {
+        cout << "  ^ ";
+        printf("%-20s                    ^", hand.at(c)->name);
+      }
+      else if(l == 4)
+      {
+        cout << "  ^ Strength: ";
+        printf("%2d          ^", hand.at(c)->strength);
+      }
+      else if(l == 5)
+      {
+        cout << "  ^ Ability: ";
+        printf("%d           ^", hand.at(c)->ability);
+      }
+      else if(l == 6)
+      {
+        if(hand.at(c)->isHero)
+        {
+          cout << "  ^ Hero Card            ^";
+        }
+        else
+        {
+          cout << "  ^                      ^";
+        }
+      }
+      else if(l == 7)
+      {
+        cout << "  ^                      ^";
+      }
+    }
+    cout << endl;
+  }
+  cout << endl;
+}
