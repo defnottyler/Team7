@@ -7,3 +7,14 @@ true Poor_Infantry 1 0 0 false
 
 This card is a unit card with the name "Poor_Infantry", a strength
 of one, close range, no ability, and is not a hero card.
+
+A special card would look like this:
+
+false name ability
+
+special card abilities:
+0 = clear entire board
+1 = debuff row 0
+2 = debuff row 1
+3 = debuff row 2
+4 = buff user selected row
