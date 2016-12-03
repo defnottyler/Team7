@@ -8,6 +8,14 @@ true Poor_Infantry 1 0 0 false
 This card is a unit card with the name "Poor_Infantry", a strength
 of one, close range, no ability, and is not a hero card.
 
+unit card abilities
+0 (or anything not listed below) = nothing
+1 = morale boost (+1 to all cards except itself)
+2 = spy (card is played on oponents field, but you draw two cards from your deck)
+3 = medic (choose a card from your grave to bring back (no hero or special))
+4 = scorch (card(s) with highest value in corresponding row are destroyed)
+5 = tight bond (two or more cards of the same name are on the row, their strength is doubled)
+
 A special card would look like this:
 
 false name ability
