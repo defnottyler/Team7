@@ -34,6 +34,7 @@ void Board::displayHand(int p)
         printRow(playerOneHand, rowIndices[i], rowIndices[i + 1]);
       }
     }
+  }
     
   //Player 2's Hand
   else
