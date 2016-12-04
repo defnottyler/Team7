@@ -9,7 +9,7 @@ class BoardRow
 	
 public:
 	
-	//BoardRow constructor.
+    //BoardRow constructor.
     BoardRow();
     
     //BoardRow variables.
