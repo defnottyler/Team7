@@ -52,7 +52,23 @@ void Board::displayBoard(int p, int p1Score, int p2Score)
   if(p == 1)
   {
     int rowStrength = 0;
-    
+    for(int r = 0; r < 3; r++)
+    {
+      vector<Card*> row = playerTwoRows[r];
+      rowStrength = row.getRowStr();
+      
+      cout << "**********************" << endl;
+      if(r == 2)
+        cout << "* Siege              *" << endl;
+      else if(r == 1)
+        cout << "* Ranged             *" << endl;
+      else
+        cout << "* Close Combat       *" << endl;
+      cout << "* Row Strength: ";
+      printf("%3d    *\n", rowStrength);
+      cout << "* Effect: ";
+      printf("%d          *\n", );
+    }
   }
   
   //Board Setup for Player 2
