@@ -103,10 +103,9 @@ void Board::printBoard(int p, int p1Score, int p2Score)
       {
          printCards.push_back(row.cards.at(c));
       }
-      printRow(printCards, 1, (int)printCards.size());
+      printRow(printCards, 0, (int)printCards.size());
       printRowBorder(maxNumCards);
-    }
-    
+    }    
     int totalOppStr = 0;
     int totalPlaStr = 0;
     for(int i = 0; i < 3; i++)
@@ -168,7 +167,7 @@ void Board::printBoard(int p, int p1Score, int p2Score)
       {
          printCards.push_back(row.cards.at(c));
       }
-      printRow(printCards, 1, (int)printCards.size());
+      printRow(printCards, 0, (int)printCards.size());
       printRowBorder(maxNumCards);
     }
   }
@@ -229,7 +228,7 @@ void Board::printBoard(int p, int p1Score, int p2Score)
       {
          printCards.push_back(row.cards.at(c));
       }
-      printRow(printCards, 1, (int)printCards.size());
+      printRow(printCards, 0, (int)printCards.size());
       printRowBorder(maxNumCards);
     }
     
@@ -294,7 +293,7 @@ void Board::printBoard(int p, int p1Score, int p2Score)
       {
          printCards.push_back(row.cards.at(c));
       }
-      printRow(printCards, 1, (int)printCards.size());
+      printRow(printCards, 0, (int)printCards.size());
       printRowBorder(maxNumCards);
     }
   }
