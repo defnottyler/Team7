@@ -52,7 +52,8 @@ void print_menu()
 
 int main()
 {
-	int gamePointKeeper();
+	int p1GamePoints = 0;
+	int p2GamePoints = 0;
 	
 	center_print("WELCOME TO CARDS AND BARDS", 1);
 	center_print("Cards and Bards is a classy game for lads and lasses alike.", 0);
@@ -66,23 +67,60 @@ int main()
 	do
 	{
 		
-	center_print("MAIN MENU",0);
-	print_menu();
-	
-	
-	Board *myBoard = new Board();
-	
-	int p1Score = 0;
-	int p2Score = 0;
-	
-	do
-	{
-		myBoard->playRound(p1Score, p2Score);
-		cout << p1Score <<endl;
-		cout << p2Score <<endl;
+		center_print("MAIN MENU",0);
+		print_menu();
+		cin >> userInput;
+		while (cin.fails() || userInput < 0 || userInput > 4)
+		{
+			cout <<Invalid Input. Please choose from following options: << endl;
+			print_menu()
+				cin.clear();
+			cin.ignore(256, '\n');
+			
+			cin >>userInput;
+		}
 		
-	} while (p1Score != 2 && p2Score != 2);
+		//if user wants to play a game
+		if (userInput == 1)
+		{
+			Board *myBoard = new Board();
 	
-	while (userInput != 4);
+			int p1Score = 0;
+			int p2Score = 0;
+	
+			do
+			{
+				myBoard->playRound(p1Score, p2Score);
+				cout << p1Score <<endl;
+				cout << p2Score <<endl;
+		
+			} while (p1Score != 2 && p2Score != 2);
+			
+			//Awards game points to winner of game
+			if (p1Score == 2)
+			{
+				++p1GamePoints;
+			}
+			if (p2Score == 2)
+			{
+				++p2GamePoints;	
+			}	
+		}
+		
+		//Help File
+		else if (userInput == 2)
+		{
+			Help::help_file();
+		}
+		
+		//Game Score
+		else if (userInput == 3)
+		{
+			cout << "Player 1 has won " << p1GamePoints << endl;
+			cout << "Player 2 has won " << p2GamePoints << endl;
+		}
+		
+	} while (userInput != 4);
+	
 	return 0;
 }
