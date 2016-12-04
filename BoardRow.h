@@ -10,6 +10,7 @@ public:
     vector<UnitCard*> cards;
     void setRow(int pos);
     int getRowStr();
+    void add(UnitCard *card);
     void deBuff();
     void buff();
     void moraleBoost();
@@ -36,6 +37,20 @@ void BoardRow::setRow(int pos)
     rowPosition = pos;
 }
 
+void BoardRow::add(UnitCard* card)
+{
+	if (!card->isHero)
+	{
+		if (deBuffed)
+			card->setStrength(1);
+		if (morale)
+			card->setStrength(card->getStrength() + 1);
+		if (buffed)
+			card->setStrength(card->getStrength() * 2);
+	}
+	cards.push_back(card);
+}
+
 void BoardRow::clear()
 {
     rowStrength = 0;
@@ -47,6 +62,8 @@ void BoardRow::clear()
     }
     //buffed = false;
     deBuffed = false;
+    if (buffed)
+		buff();
     if (morale)
         moraleBoost();
 }
@@ -104,5 +121,6 @@ void BoardRow::reset()
     buffed = false;
     deBuffed = false;
     morale = false;
+    clear();
     rowStrength = 0;
 }

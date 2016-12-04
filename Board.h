@@ -265,9 +265,9 @@ void Board::playCard(int index, vector<Card*> &playerHand, bool pl) {
         cardRow = uCard->type;
         ability = uCard->ability;
         if (!pl && ability != 2) //player one
-            playerOneRows[cardRow].cards.push_back(uCard);
+            playerOneRows[cardRow].add(uCard);
         else if (pl && ability != 2)
-            playerTwoRows[cardRow].cards.push_back(uCard);
+            playerTwoRows[cardRow].add(uCard);
         switch (ability)
         {
             case 1:
@@ -276,16 +276,15 @@ void Board::playCard(int index, vector<Card*> &playerHand, bool pl) {
             case 2:
                 spy(pl);
                 if (!pl)
-                    playerTwoRows[cardRow].cards.push_back(uCard);
+                    playerTwoRows[cardRow].add(uCard);
                 else
-                    playerOneRows[cardRow].cards.push_back(uCard);
+                    playerOneRows[cardRow].add(uCard);
                 break;
             case 3:
+				medic(pl);
                 break;
             case 4:
                 scorch(pl, cardRow);
-                break;
-            case 5:
                 break;
         }
         playerHand.erase(playerHand.begin() + index - 1);
@@ -380,26 +379,86 @@ void Board::spy(bool pl)
     }
 }
 
-void Board::medic(bool pl) //account for empty grave
+void Board::medic(bool pl) 
 {
-    srand(time(NULL));
-    int index = 0;
-    if(pl)
+	UnitCard *card;
+	int choice;
+    if (!pl)
     {
-        if (playerOneGrave.size() == 0)
-            break;
-        index = rand() % playerOneGrave.size();
-        playerOneHand.push_back(playerOneGrave.at(index));
-        playerOneGrave.erase(playerOneGrave.begin() + index - 1);
-    }
-    else
-    {
-        if(playerTwoGrave.size() == 0)
-            break;
-        index = rand() % playerTwoGrave.size();
-        playerTwoHand.push_back(playerTwoGrave.at(index));
-        playerTwoGrave.erase(playerTwoGrave.begin() + index - 1);
-    }
+		if (playerOneGrave.size() == 0)
+			return;
+		while (true)
+		{
+			cout <<"Choose a card to play (can't be hero or special):\n";
+			for (int i = 0; i < playerOneGrave.size(); i++)
+			{
+				cout <<i+1<<". "<<playerOneGrave.at(i)->name<<endl;
+			}
+			cin >>choice; choice--;
+			if (choice < 0 || choice > playerOneGrave.size() - 1)
+			{
+				cout <<"Invalid choice, try again.\n";
+				continue;
+			}
+			if (playerOneGrave.at(choice)->isUnit)
+			{
+				card = (UnitCard*)playerOneGrave.at(choice);
+				if (!card->isHero)
+				{
+					playCard(choice, playerOneGrave, pl);
+					break;
+				}
+				else
+				{
+					cout <<"Play a non hero card.\n";
+					continue;
+				}
+			}
+			else
+			{
+				cout <<"Select a unit card.\n";
+				continue;
+			}
+		}
+	}
+	else
+	{
+		if (playerTwoGrave.size() == 0)
+			return;
+		while (true)
+		{
+			cout <<"Choose a card to play (can't be hero or special):\n";
+			for (int i = 0; i < playerTwoGrave.size(); i++)
+			{
+				cout <<i+1<<". "<<playerTwoGrave.at(i)->name<<endl;
+			}
+			cin >>choice; choice--;
+			if (choice < 0 || choice > playerTwoGrave.size() - 1)
+			{
+				cout <<"Invalid choice, try again.\n";
+				continue;
+			}
+			if (playerTwoGrave.at(choice)->isUnit)
+			{
+				card = (UnitCard*)playerTwoGrave.at(choice);
+				if (!card->isHero)
+				{
+					playCard(choice, playerTwoGrave, pl);
+					break;
+				}
+				else
+				{
+					cout <<"Play a non hero card.\n";
+					continue;
+				}
+			}
+			else
+			{
+				cout <<"Select a unit card.\n";
+				continue;
+			}
+		}
+	}
 }
 
 void Board::scorch(bool pl, int row)
