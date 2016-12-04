@@ -28,11 +28,27 @@ void Board::printHand(int p)
           rowIndices[i] = cardsInHand;
         }
       }
-      
+
+      for(int c = 1; c <= 2; c++)
+      {
+        for(int undrScr = 1; undrScr <= 26; undrScr++)
+        {
+          cout << "_";
+        }
+      }
+      cout << "        YOUR  HAND        ";
+      for(int c = 1; c <= 2; c++)
+      {
+        for(int undrScr = 1; undrScr <= 26; undrScr++)
+        {
+          cout << "_";
+        }
+      }
       for(int i = 0; i < indices; i++)
       {
         printRow(playerOneHand, rowIndices[i], rowIndices[i + 1]);
       }
+      printRowBorder(5);
     }
   }
     
@@ -62,11 +78,27 @@ void Board::printHand(int p)
           rowIndices[i] = cardsInHand;
         }
       }
-      
+
+      for(int c = 1; c <= 2; c++)
+      {
+        for(int undrScr = 1; undrScr <= 26; undrScr++)
+        {
+          cout << "_";
+        }
+      }
+      cout << "        YOUR  HAND        ";
+      for(int c = 1; c <= 2; c++)
+      {
+        for(int undrScr = 1; undrScr <= 26; undrScr++)
+        {
+          cout << "_";
+        }
+      }
       for(int i = 0; i < indices; i++)
       {
         printRow(playerTwoHand, rowIndices[i], rowIndices[i + 1]);
       }
+      printRowBorder(5);
     }
   }
 }
