@@ -91,8 +91,8 @@ int main()
 			do
 			{
 				myBoard->playRound(p1Score, p2Score);
-				cout << p1Score <<endl;
-				cout << p2Score <<endl;
+				cout << "Player 1 has won " << p1Score << " rounds" << endl;
+				cout << "Player 2 has won " << p2Score << " rounds" << endl;
 		
 			} while (p1Score != 2 && p2Score != 2);
 			
