@@ -9,7 +9,7 @@ void Board::displayHand(int p)
     
     if(cardsInHand == 0)
     {
-      cout << "You have no more cards to play"
+      cout << "You have no more cards to play";
     }
     else
     {
@@ -43,7 +43,7 @@ void Board::displayHand(int p)
     
     if(cardsInHand == 0)
     {
-      cout << "You have no more cards to play"
+      cout << "You have no more cards to play";
     }
     else
     {
