@@ -13,9 +13,13 @@ void Board::printHand(int p)
     }
     else
     {
-      int indices = (int)(ceil(cardsInHand / 5));
+      int indices = (int)(cardsInHand / 5);
+      if(cardsInHand % 5 > 0)
+      {
+        indices++;
+      }
       int rowIndices[indices];
-      rowIndices[0] = 1;
+      rowIndices[0] = 0;
     
       for(int i = 1; i <= indices; i++)
       {
@@ -63,9 +67,13 @@ void Board::printHand(int p)
     }
     else
     {
-      int indices = (int)(ceil(cardsInHand / 5));
+      int indices = (int)(cardsInHand / 5);
+      if(cardsInHand % 5 > 0)
+      {
+        indices++;
+      }
       int rowIndices[indices];
-      rowIndices[0] = 1;
+      rowIndices[0] = 0;
     
       for(int i = 1; i <= indices; i++)
       {
@@ -102,3 +110,4 @@ void Board::printHand(int p)
     }
   }
 }
+
