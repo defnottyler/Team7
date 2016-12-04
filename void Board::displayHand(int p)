@@ -1,9 +1,9 @@
 #include <cmath>
 
-void Board::displayHand(bool p)
+void Board::displayHand(int p)
 {
   //Player 1's hand
-  if (!p)
+  if (p == 1)
   {
     int cardsInHand = playerOneHand.size();
     
