@@ -382,6 +382,24 @@ void Board::spy(bool pl)
 
 void Board::medic(bool pl) //account for empty grave
 {
+    srand(time(NULL));
+    int index = 0;
+    if(pl)
+    {
+        if (playerOneGrave.size() == 0)
+            break;
+        index = rand() % playerOneGrave.size();
+        playerOneHand.push_back(playerOneGrave.at(index));
+        playerOneGrave.erase(playerOneGrave.begin() + index - 1);
+    }
+    else
+    {
+        if(playerTwoGrave.size() == 0)
+            break;
+        index = rand() % playerTwoGrave.size();
+        playerTwoHand.push_back(playerTwoGrave.at(index));
+        playerTwoGrave.erase(playerTwoGrave.begin() + index - 1);
+    }
 }
 
 void Board::scorch(bool pl, int row)
