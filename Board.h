@@ -421,97 +421,292 @@ void Board::playCard(int index, vector<Card*> &playerHand, bool pl) {
     
 }
 
-void Board::printBoard(int p)
+/*
+ * This helper method prints out a series of cards from a vector of Card pointers. It prints cards
+ * between and including a specified start and end index. It is designed to assist the printHand(int p)
+ * and printBoard(int p, int p1Score, int p2Score) methods.
+ */
+void Board::printRow(vector<Card*> hand, int start, int end)
 {
-	if(p==1){
-		cout<<"~~~~~~~~~~~~GAMING BOARD~~~~~~~~~~~~\n";
-		cout<<"~~~~Other player's Siege cards: ~~~~\n";
-		//display playerTwoRows[2]
-		for (int k=0; k < playerTwoRows[2].cards.size(); k++){
-		playerTwoRows[2].cards.at(k)->toString();
-		}
-		cout<<"~~~~Other player's Ranged cards: ~~~~\n";
-		//display playerTwoRows[1]
-		for (int k=0; k < playerTwoRows[1].cards.size(); k++){
-		playerTwoRows[1].cards.at(k)->toString();
-		}
-		cout<<"~Other player's Close Combat cards: ~\n";
-		//display playerTwoRows[0]
-		for (int k=0; k < playerTwoRows[0].cards.size(); k++){
-		playerTwoRows[0].cards.at(k)->toString();
-		}
-		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		cout<<"Your Close Combat cards: \n";
-		//display playerOneRows[0]
-		for (int k=0; k < playerOneRows[0].cards.size(); k++){
-		playerOneRows[0].cards.at(k)->toString();
-		}
-		cout<<"Your Ranged cards: \n";
-		//display playerOneRows[1]
-		for (int k=0; k < playerOneRows[1].cards.size(); k++){
-		playerOneRows[1].cards.at(k)->toString();
-		}
-		cout<<"Your Siege cards: \n";
-		//display playerOneRows[2]
-		for (int k=0; k < playerOneRows[2].cards.size(); k++){
-		playerOneRows[2].cards.at(k)->toString();
-		}
-		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		cout<<"Your hand: (Name/Type/Abilit/isHero/Strength)\n";
-		
-	}
-	else{
-		cout<<"~~~~~~~~~~~~GAMING BOARD~~~~~~~~~~~~\n";
-		cout<<"~~~~Other player's Siege cards: ~~~~\n";
-		//display playerOneRows[2]
-		for (int k=0; k < playerOneRows[2].cards.size(); k++){
-		playerOneRows[2].cards.at(k)->toString();
-		}
-		cout<<"~~~~Other player's Ranged cards: ~~~~\n";
-		//display playerOneRows[1]
-		for (int k=0; k < playerOneRows[1].cards.size(); k++){
-		playerOneRows[1].cards.at(k)->toString();
-		}
-		cout<<"~Other player's Close Combat cards: ~\n";
-		//display playerOneRows[0]
-		for (int k=0; k < playerOneRows[0].cards.size(); k++){
-		playerOneRows[0].cards.at(k)->toString();
-		}
-		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		cout<<"~~~~~Your Close Combat cards: ~~~~~~\n";
-		//display playerTwoRows[0]
-		for (int k=0; k < playerTwoRows[0].cards.size(); k++){
-		playerTwoRows[0].cards.at(k)->toString();
-		}
-		cout<<"~~~~~~~~Your Ranged cards: ~~~~~~~~~\n";
-		//display playerTwoRows[1]
-		for (int k=0; k < playerTwoRows[1].cards.size(); k++){
-		playerTwoRows[1].cards.at(k)->toString();
-		}
-		cout<<"~~~~~~~~~Your Siege cards: ~~~~~~~~~\n";
-		//display playerTwoRows[2]
-		for (int k=0; k < playerTwoRows[2].cards.size(); k++){
-		playerTwoRows[2].cards.at(k)->toString();
-		}
-		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		cout<<"Your hand: (Name/Type/Abilit/isHero/Strength)\n";
-		
-	}
+  //Iterates through the "height" of the cards, adding in the appropriate elements per line
+  for(int l = 0; l <= 6 ; l++)
+  {
+	//Prints out a the "l'th" line for each card in the row
+    for(int c = start; c < end; c++)
+    {
+	  //Placeholder variables for the two different card types
+      UnitCard* unit = 0;
+      SpecialCard* special = 0;
+
+	  //Checks the type of card and assigns it to the appropriate variable
+      if(hand.at(c)->isUnit)
+        unit = (UnitCard*)hand.at(c);
+      else
+        special = (SpecialCard*)hand.at(c);
+      
+      //Prints the top and bottom borders of the cards
+      if(l == 1 || l == 6)
+      {
+        cout << "  ^**********************^";
+      }
+      //Prints the 2nd line which labels the card "Hero" if it is a Hero card
+      //Also lists the card number for selection purposes
+      else if(l == 2)
+      {
+        cout << "  ^";
+        if(hand.at(c)->isUnit && unit->isHero)
+        {
+	      printf(" (Hero)            %2d ^", c + 1);
+        }
+        else
+        {
+          printf("                   %2d ^", c + 1);
+        }
+      }
+      //Prints the 3rd line of each card which contains the name
+      else if(l == 3)
+      {
+	    string n = hand.at(c)->name;
+        cout << "  ^ ";
+        printf("%-20s ^", n.c_str());
+      }
+      //Prints the 4th line of each card
+      //Displays the strength for UnitCard types
+      //Displays the effect for SpecialCard types
+      else if(l == 4)
+      {
+        if(hand.at(c)->isUnit)
+        {
+	      int s = unit->strength;
+          cout << "  ^ Strength: ";
+          printf("%2d         ^", (int)s);
+        }
+        else
+        {
+	      int e = special->effect;
+          cout << "  ^ Effect: ";
+          printf("%d            ^", (int)e);
+        }
+      }
+      //Prints out the 5th line for each card
+      //Contains Ability for UnitCard types (medic, scorch, spy, morale booster)
+      //Contains Effected row(s) for SpecialCard types(Both Close/Ranged/Siege, Any Player Row)
+      else if(l == 5)
+      {
+        if(hand.at(c)->isUnit)
+        {
+	      int a = unit->ability;
+          cout << "  ^ Ability: ";
+          printf("%d           ^", (int)a); 
+        }
+        else
+        {
+	  if(special->effect != 4)
+          {
+	    cout << "  ^ Row: ";
+            if(special->effect == 1)
+            {
+	       cout << "Both Close      ^";
+            }
+	    else if(special->effect == 2)
+            {
+	       cout << "Both Ranged     ^";
+            }
+            else
+            {
+	       cout << "Both Siege      ^";
+            }
+          }
+          else
+          {
+	    cout << "  ^ Rows: Any Player Row ^";
+          }
+        }
+      }
+    }
+    cout << endl;
+  }
 }
 
+/*
+ * Method prints out the hand of the current player. The formatting displays a
+ * player's hand in rows of 5 cards.
+ */
 void Board::printHand(int p)
 {
-	cout << "-------HAND-------" << endl; 
-	if (p == 1) 
-	{
-		for (int i=0; i < playerOneHand.size(); ++i) {
-			playerOneHand.at(i)->toString();
-		}
-	}
-	else
-	{
-		for( Card* myCard : playerTwoHand)
-			myCard->toString();
-	}
-	cout << "------------------" << endl; 
+  //Displays player 1's hand
+  if (p == 1)
+  {
+	//The total number of cards that player 1 has in their hand
+    int cardsInHand = playerOneHand.size();
+    
+    //Prints out a message to the player when there are no more cards left
+    if(cardsInHand == 0)
+    {
+      cout << "You have no more cards to play";
+    }
+    //When there are still cards in player 1's deck, print out the deck
+    else
+    {
+	  //Determines number of rows
+      int indices = (int)(cardsInHand / 5);
+      if(cardsInHand % 5 > 0)
+      {
+        indices++;
+      }
+      int rowIndices[indices];
+      rowIndices[0] = 0;
+      
+      //Assigns appropriate index values which will be used to populate rows
+      for(int i = 1; i <= indices; i++)
+      {
+        if(i < indices)
+        {
+          rowIndices[i] = 5 * i;
+        }
+        if(i == indices)
+        {
+          rowIndices[i] = cardsInHand;
+        }
+      }
+      //Prints out a header
+      for(int c = 1; c <= 2; c++)
+      {
+        for(int undrScr = 1; undrScr <= 26; undrScr++)
+        {
+          cout << "_";
+        }
+      }
+      cout << "        YOUR  HAND        ";
+      for(int c = 1; c <= 2; c++)
+      {
+        for(int undrScr = 1; undrScr <= 26; undrScr++)
+        {
+          cout << "_";
+        }
+      }
+      //Calls the printRow() method for each row of cards to be printed
+      for(int i = 0; i < indices; i++)
+      {
+        printRow(playerOneHand, rowIndices[i], rowIndices[i + 1]);
+      }
+      //Prints a border for the bottom of the deck
+      printRowBorder(5);
+    }
+  }
+    
+  //Displays player 2's hand
+  else
+  {
+	//The total number of cards that player 1 has in their hand
+    int cardsInHand = playerTwoHand.size();
+    
+    //Prints out a message to the player when there are no more cards left
+    if(cardsInHand == 0)
+    {
+      cout << "You have no more cards to play";
+    }
+    //When there are still cards in player 1's deck, print out the deck
+    else
+    {
+      //Determines number of rows
+      int indices = (int)(cardsInHand / 5);
+      if(cardsInHand % 5 > 0)
+      {
+        indices++;
+      }
+      int rowIndices[indices];
+      rowIndices[0] = 0;
+      
+      //Assigns appropriate index values which will be used to populate rows
+      for(int i = 1; i <= indices; i++)
+      {
+        if(i < indices)
+        {
+          rowIndices[i] = 5 * i;
+        }
+        if(i == indices)
+        {
+          rowIndices[i] = cardsInHand;
+        }
+      }
+
+      //Prints out a header
+      for(int c = 1; c <= 2; c++)
+      {
+        for(int undrScr = 1; undrScr <= 26; undrScr++)
+        {
+          cout << "_";
+        }
+      }
+      cout << "        YOUR  HAND        ";
+      for(int c = 1; c <= 2; c++)
+      {
+        for(int undrScr = 1; undrScr <= 26; undrScr++)
+        {
+          cout << "_";
+        }
+      }
+      //Calls the printRow() method for each row of cards to be printed
+      for(int i = 0; i < indices; i++)
+      {
+        printRow(playerTwoHand, rowIndices[i], rowIndices[i + 1]);
+      }
+      //Prints a border for the bottom of the deck
+      printRowBorder(5);
+    }
+  }
+}
+
+/*
+ * Finds the maximum number of cards contained in a row on the board
+ * This method is used to determine the length of the borders for the
+ * printBoard() method
+ */
+int Board::maxRowSize()
+{
+  int max = 0;
+  
+  //Compares the sizes of each row on player 1's side and assigns the largest value to max
+  for(int r = 0; r < 3; r++)
+  {
+    int size = 0;
+    size = playerOneRows[r].cards.size();
+    if(max < size)
+    {
+      max = size;
+    }
+  }
+  
+  //Compares the sizes of each row on player 2's side and assigns the largest value to max
+  for(int r = 0; r < 3; r++)
+  {
+    int size = 0;
+    size = playerOneRows[r].cards.size();
+    if(max < size)
+    {
+      max = size;
+    }
+  }
+  
+  return max;
+}
+
+/*
+ * Prints a border for a row of cards using the '_' character
+ */
+void Board::printRowBorder(int max)
+{
+  if(max == 0)
+  {
+    max = 1;
+  }
+  for(int c = 1; c <= max; c++)
+  {
+    for(int undrScr = 1; undrScr <= 26; undrScr++)
+    {
+      cout << "_";
+    }
+  }
+  cout << endl;
 }
