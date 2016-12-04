@@ -11,8 +11,6 @@ public:
     void setRow(int pos);
     int getRowStr();
     void add(UnitCard *card);
-    bool getDeBuff();
-    bool getBuff();
     void deBuff();
     void buff();
     void moraleBoost();
@@ -76,17 +74,16 @@ void BoardRow::deBuff()
     for (int i = 0; i < cards.size(); i++)
     {
         if (!cards.at(i)->isHero && !buffed)
+        {
             cards.at(i)->setStrength(1);
+		}
         else if (!cards.at(i)->isHero && buffed)
+        {
             cards.at(i)->setStrength(2);
+		}
         rowStrength += cards.at(i)->getStrength();
     }
     deBuffed = true;
-}
-
-bool BoardRow::getDeBuff()
-{
-   return deBuff;	
 }
 
 void BoardRow::buff()
@@ -101,11 +98,6 @@ void BoardRow::buff()
         rowStrength += cards.at(i)->getStrength();
     }
     buffed = true;
-}
-
-bool BoardRow::getBuff()
-{
-   return buff;	
 }
 
 void BoardRow::moraleBoost()
