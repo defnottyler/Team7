@@ -1,0 +1,63 @@
+int Board::maxRowSize(BoardRow *player1, BoardRow *player2)
+{
+  int max = 0;
+  
+  for(int r = 0; r < 3; r++)
+  {
+    vector<*Cards> cardsInRow = player1[r].cards;
+    int size = cardsInRow.size();
+    if(max < size)
+    {
+      max = size;
+    }
+  }
+  
+  for(int r = 0; r < 3; r++)
+  {
+    vector<*Cards> cardsInRow = player2[r].cards;
+    int size = cardsInRow.size();
+    if(max < size)
+    {
+      max = size;
+    }
+  }
+  
+  return max;
+}
+
+void Board::printRowBoarder(int maxNumCards)
+{
+  if(maxNumCards == 0)
+  {
+    maxNumCards = 1;
+  }
+  for(int c = 1; c <= maxNumCards; c++)
+  {
+    for(int undrScr = 1; undrScr <= 26; undrScr++)
+    {
+      cout << "_";
+    }
+  }
+  cout << endl << endl;
+}
+
+void Board::displayBoard(int p, int p1Score, int p2Score)
+{
+  cout << "  ________________________________" << endl;
+  cout << " | Score        Player 1 : " << p1Score << "     |" << endl;
+  cout << " |              Player 2 : " << p2Score << "     |" << endl;
+  cout << " |________________________________|" << endl << endl << endl;
+  
+  //Board Setup for Player 1
+  if(p == 1)
+  {
+    int rowStrength = 0;
+    
+  }
+  
+  //Board Setup for Player 2
+  else
+  {
+    
+  }
+}                                                                                                                     
