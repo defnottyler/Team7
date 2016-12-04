@@ -2,6 +2,7 @@
 //#def SOMENAME
 
 #include <cmath>
+#include <algorithm>
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -95,20 +96,23 @@ void Board::initializeDecks(string filename, bool p)
 	int index = 5;
 	while (getline(d_one, line))
 	{ 
-		if (line.substr(0, 4) == "true")
+		if (line.substr(0, 4).compare("true") == 0)
 		{
 			index = line.find(" ", 5);
 			name = line.substr(5, index - 5);
+			replace(name.begin(), name.end(), '_', ' ');
 			index++;
 			strength = stoi(line.substr(index, 2));
-
 			index = line.find(" ", index) + 1;
 			range = stoi(line.substr(index, 1));
 			index = line.find(" ", index) + 1;
 			ability = stoi(line.substr(index, 1));
 			index = line.find(" ", index) + 1;
-			if (line.substr(index, 4) == "true")
+			if (stoi(line.substr(index, 1)) == 1)
+			{
 				hero = true;
+			}
+			//cout<<name<<" "<<line.substr(index, 4)<<" "<<hero<<endl;
 			//cout << " p is" << p << endl;
 			//cout << "Grabbed data from text file: " << range << ability << hero << name << strength << endl;
 			if (p)
@@ -125,6 +129,7 @@ void Board::initializeDecks(string filename, bool p)
 
 			index = line.find(" ", 6);
 			name = line.substr(6, index - 6);
+			replace(name.begin(), name.end(), '_', ' ');
 			ability = stoi(line.substr(index + 1, 1));
 			
 			if (p)
@@ -149,7 +154,7 @@ void Board::handGenerator()			//puts cards from deck into player hand(s)
 	int index1;
 	int index2;
 	//cout <<"Before loop\n";
-	for (int i = 0; i<11; i++) {
+	for (int i = 0; i<10; i++) {
 		//cout <<"Start of loop\n";
 		//cout << deckSize1 << endl;
 		index1 = (int)(rand() % deckSize1);
@@ -161,13 +166,13 @@ void Board::handGenerator()			//puts cards from deck into player hand(s)
 		//cout << "playerOneHand.size() is " << playerOneHand.size() << endl;
 		//cout << "playerOneDeck.size() is " << playerOneDeck.size() << endl;
 		playerOneHand.push_back(playerOneDeck.at(index1));
-		playerOneDeck.erase(playerOneDeck.begin() + index1 - 1);
+		playerOneDeck.erase(playerOneDeck.begin() + index1);
 		deckSize1--;
 		//cout << "index is " << index1 << endl;
 		//cout << "playerTwoHand.size() is " << playerTwoHand.size() << endl;
 		//cout << "playerTwoDeck.size() is " << playerTwoDeck.size() << endl;
 		playerTwoHand.push_back(playerTwoDeck.at(index2));
-		playerTwoDeck.erase(playerTwoDeck.begin() + index2 - 1);
+		playerTwoDeck.erase(playerTwoDeck.begin() + index2);
 		deckSize2--;
 		//cout <<"End of loop\n";
 		//hands are now generated
@@ -289,18 +294,18 @@ void Board::clearBoard()
 
 void Board::playerOneTurn()
 {
-	if (playerOneHand.size() == 1)
+	 if (playerOneHand.size() == 0)
 	{
 		p1Pass = true;
 		return;
-	}
+	} 
 	int cardIndex;
 	displayTurnOptions(1);
 	cin >> turnOption;
 	if (turnOption == 1) {
 		cout << "Select Card to play: ";
 		cin >> cardIndex;
-		while( cin.fail() || cardIndex < 1 || cardIndex > playerTwoHand.size() - 1)
+		while( cin.fail() || cardIndex < 1 || cardIndex > playerOneHand.size())
 		{
 			cout <<"Please choose a card from the numbered list " << endl;
 			printHand(1);
@@ -308,14 +313,14 @@ void Board::playerOneTurn()
 			cin.ignore(256,'\n');
 			cin >> cardIndex;
 		}
-		playCard(cardIndex, playerOneHand, false);
+		playCard(cardIndex - 1, playerOneHand, false);
 		playerTurn = !playerTurn;
-		//cout << "\033[2J\033[1;1H";
+		cout << "\033[2J\033[1;1H";
 	}
 	else if (turnOption == 2){
 		p1Pass = true;
 		playerTurn = !playerTurn;
-		//cout << "\033[2J\033[1;1H";
+		cout << "\033[2J\033[1;1H";
 	}
 	else if (turnOption == 3)
 		printBoard(1);
@@ -326,18 +331,18 @@ void Board::playerOneTurn()
 
 void Board::playerTwoTurn()
 {
-	if (playerTwoHand.size() == 1)
+	if (playerTwoHand.size() == 0)
 	{
 		p2Pass = true;
 		return;
-	}
+	} 
 	int cardIndex;
 	displayTurnOptions(2);
 	cin >> turnOption;
 	if (turnOption == 1) {
 		cout << "Select Card to play: ";
 		cin >> cardIndex;
-		while( cin.fail() || cardIndex < 1 || cardIndex > playerTwoHand.size() - 1)
+		while( cin.fail() || cardIndex < 1 || cardIndex > playerTwoHand.size())
 		{
 			cout <<"Please choose a card from the numbered list " << endl;
 			printHand(2);
@@ -346,14 +351,14 @@ void Board::playerTwoTurn()
 			cin >> cardIndex;
 		}
 		
-		playCard(cardIndex, playerTwoHand, true);
+		playCard(cardIndex - 1, playerTwoHand, true);
 		playerTurn = !playerTurn;
-		//cout << "\033[2J\033[1;1H";
+		cout << "\033[2J\033[1;1H";
 	}
 	else if (turnOption == 2){
 		p2Pass = true;
 		playerTurn = !playerTurn;
-		//cout << "\033[2J\033[1;1H";
+		cout << "\033[2J\033[1;1H";
 	}
 	else if (turnOption == 3){
 		printBoard(2);
@@ -379,6 +384,7 @@ void Board::playCard(int index, vector<Card*> &playerHand, bool pl) {
             playerOneRows[cardRow].add(uCard);
         else if (pl && ability != 2)
             playerTwoRows[cardRow].add(uCard);
+        playerHand.erase(playerHand.begin() + index);
         switch (ability)
         {
             case 1:
@@ -399,13 +405,13 @@ void Board::playCard(int index, vector<Card*> &playerHand, bool pl) {
                 break;
         }
         //playerHand.at(index) = NULL;
-        playerHand.erase(playerHand.begin() + index - 1);
+        //playerHand.erase(playerHand.begin() + index);
 	}
     else
     {
         sCard = (SpecialCard*)playerHand.at(index);
         ability = sCard->effect;
-        playerHand.erase(playerHand.begin() + index - 1);
+        playerHand.erase(playerHand.begin() + index);
         if (!pl)
             playerOneGrave.push_back(sCard);
         else
@@ -478,7 +484,7 @@ void Board::spy(bool pl)
                 break;
             index = rand() % playerOneDeck.size();
             playerOneHand.push_back(playerOneDeck.at(index));
-            playerOneDeck.erase(playerOneDeck.begin() + index - 1);
+            playerOneDeck.erase(playerOneDeck.begin() + index);
         }
         else
         {
@@ -486,7 +492,7 @@ void Board::spy(bool pl)
                 break;
             index = rand() % playerTwoDeck.size();
             playerTwoHand.push_back(playerTwoDeck.at(index));
-            playerTwoDeck.erase(playerTwoDeck.begin() + index - 1);
+            playerTwoDeck.erase(playerTwoDeck.begin() + index);
         }
     }
 }
@@ -588,7 +594,7 @@ void Board::scorch(bool pl, int row)
             if (playerTwoRows[row].cards.at(i)->getStrength() == maxStrength)
             {
                 playerTwoGrave.push_back(playerTwoRows[row].cards.at(i));
-                playerTwoRows[row].cards.erase(playerTwoRows[row].cards.begin() + i - 1);
+                playerTwoRows[row].cards.erase(playerTwoRows[row].cards.begin() + i);
             }
         }
     }
@@ -604,7 +610,7 @@ void Board::scorch(bool pl, int row)
             if (playerOneRows[row].cards.at(i)->getStrength() == maxStrength)
             {
                 playerOneGrave.push_back(playerOneRows[row].cards.at(i));
-                playerOneRows[row].cards.erase(playerOneRows[row].cards.begin() + i - 1);
+                playerOneRows[row].cards.erase(playerOneRows[row].cards.begin() + i);
             }
         }
     }
@@ -743,18 +749,23 @@ void Board::printRow(vector<Card*> hand, int start, int end)
 void Board::printHand(int p)
 {
 	cout << "-------HAND-------" << endl; 
+	int cardNumberOne = 0;
+	int cardNumberTwo = 0;
 	if (p == 1) 
 	{
 		
-		for (int i = 1; i < playerOneHand.size(); ++i) {
-			cout << i << " ";
+		
+		for (int i = 0; i < playerOneHand.size(); ++i) {
+			cardNumberOne++;
+			cout << cardNumberOne << " ";
 			playerOneHand.at(i)->toString();
 		}
 	}
 	else
 	{
-		for (int i = 1; i < playerTwoHand.size(); ++i) {
-			cout << i << " ";
+		for (int i = 0; i < playerTwoHand.size(); ++i) {
+			cardNumberTwo++;
+			cout << cardNumberTwo << " ";
 			playerTwoHand.at(i)->toString();
 		}
 	}
