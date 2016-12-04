@@ -710,3 +710,266 @@ void Board::printRowBorder(int max)
   }
   cout << endl;
 }
+
+/*
+ * 
+ */
+void Board::printBoard(int p, int p1Score, int p2Score)
+{
+  cout << "  _______________________________" << endl;
+  cout << " | Score        Player 1 : " << p1Score << "     |" << endl;
+  cout << " |              Player 2 : " << p2Score << "     |" << endl;
+  cout << " |_______________________________|" << endl << endl;
+  
+  //Board Setup for Player 1
+  if(p == 1)
+  {
+    int rowStrength = 0;
+    for(int r = 2; r >= 0; r--)
+    {
+      BoardRow row = playerTwoRows[r];
+      rowStrength = row.getRowStr();
+      int maxNumCards = 0;
+      maxNumCards = maxRowSize();
+
+      printRowBorder(maxNumCards);
+      cout << endl;
+      cout <<   ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+      if(r == 2)
+        cout << "^ (P2) Siege         Row Strength: ";
+      else if(r == 1)
+        cout << "^ (P2) Ranged        Row Strength: ";
+      else
+        cout << "^ (P2) Close Combat  Row Strength: ";
+         printf("%3d ", (int)rowStrength);
+      cout <<   " Weather Effect: ";
+      if(r == 2 && row.getDeBuffed())
+      {
+         cout <<   "Rain  ";
+      }
+      else if(r == 1 && row.getDeBuffed())
+      {
+	 cout <<   "Fog   ";
+      }
+      else if(r == 0 && row.getDeBuffed())
+      {
+	 cout <<   "Frost ";
+      }
+      else
+      {
+         cout <<   "NONE  ";
+      }
+      
+      cout <<   " Buff Effect: ";
+      if(row.getBuffed())
+      {
+         cout <<"X2 Multiplier v\n";
+      }
+      else
+      {
+         cout <<"NONE          v\n";
+      }
+      cout <<   "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl << endl;
+      
+      vector<Card*> printCards;
+      for(int c = 0; c < row.cards.size(); c++)
+      {
+         printCards.push_back(row.cards.at(c));
+      }
+      printRow(printCards, 0, (int)printCards.size());
+      printRowBorder(maxNumCards);
+    }
+    
+    int totalOppStr = 0;
+    int totalPlaStr = 0;
+    for(int i = 0; i < 3; i++)
+    {
+      totalOppStr += playerTwoRows[i].getRowStr();
+      totalPlaStr += playerOneRows[i].getRowStr();
+    }
+    cout << "OPPONENT'S TOTAL STRENGTH: " << totalOppStr << endl;
+    cout << "PLAYER'S TOTAL STRENGTH:   " << totalPlaStr << endl;
+
+    for(int r = 0; r <= 2; r++)
+    {
+      BoardRow row = playerOneRows[r];
+      rowStrength = row.getRowStr();
+      int maxNumCards = 0;
+      maxNumCards = maxRowSize();
+
+      printRowBorder(maxNumCards);
+      cout << endl;
+      cout <<   ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+      if(r == 2)
+        cout << "^ (P1) Siege         Row Strength: ";
+      else if(r == 1)
+        cout << "^ (P1) Ranged        Row Strength: ";
+      else
+        cout << "^ (P1) Close Combat  Row Strength: ";
+         printf("%3d ", (int)rowStrength);
+      cout <<   " Weather Effect: ";
+      if(r == 2 && row.getDeBuffed())
+      {
+         cout <<   "Rain  ";
+      }
+      else if(r == 1 && row.getDeBuffed())
+      {
+	 cout <<   "Fog   ";
+      }
+      else if(r == 0 && row.getDeBuffed())
+      {
+	 cout <<   "Frost ";
+      }
+      else
+      {
+         cout <<   "NONE  ";
+      }
+      
+      cout <<   " Buff Effect: ";
+      if(row.getBuffed())
+      {
+         cout <<"X2 Multiplier v\n";
+      }
+      else
+      {
+         cout <<"NONE          v\n";
+      }
+      cout <<   "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl << endl;
+      
+      vector<Card*> printCards;
+      for(int c = 0; c < row.cards.size(); c++)
+      {
+         printCards.push_back(row.cards.at(c));
+      }
+      printRow(printCards, 0, (int)printCards.size());
+      printRowBorder(maxNumCards);
+    }
+  }
+  
+  //Board Setup for Player 2
+  else
+  {
+    {
+    int rowStrength = 0;
+    for(int r = 2; r >= 0; r--)
+    {
+      BoardRow row = playerOneRows[r];
+      rowStrength = row.getRowStr();
+      int maxNumCards = 0;
+      maxNumCards = maxRowSize();
+
+      printRowBorder(maxNumCards);
+      cout << endl;
+      cout <<   ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+      if(r == 2)
+        cout << "^ (P1) Siege         Row Strength: ";
+      else if(r == 1)
+        cout << "^ (P1) Ranged        Row Strength: ";
+      else
+        cout << "^ (P1) Close Combat  Row Strength: ";
+         printf("%3d ", (int)rowStrength);
+      cout <<   " Weather Effect: ";
+      if(r == 2 && row.getDeBuffed())
+      {
+         cout <<   "Rain  ";
+      }
+      else if(r == 1 && row.getDeBuffed())
+      {
+	 cout <<   "Fog   ";
+      }
+      else if(r == 0 && row.getDeBuffed())
+      {
+	 cout <<   "Frost ";
+      }
+      else
+      {
+         cout <<   "NONE  ";
+      }
+      
+      cout <<   " Buff Effect: ";
+      if(row.getBuffed())
+      {
+         cout <<"X2 Multiplier v\n";
+      }
+      else
+      {
+         cout <<"NONE          v\n";
+      }
+      cout <<   "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl << endl;
+      
+      vector<Card*> printCards;
+      for(int c = 0; c < row.cards.size(); c++)
+      {
+         printCards.push_back(row.cards.at(c));
+      }
+      printRow(printCards, 0, (int)printCards.size());
+      printRowBorder(maxNumCards);
+    }
+    
+    int totalOppStr = 0;
+    int totalPlaStr = 0;
+    for(int i = 0; i < 3; i++)
+    {
+      totalOppStr += playerOneRows[i].getRowStr();
+      totalPlaStr += playerTwoRows[i].getRowStr();
+    }
+    cout << "OPPONENT'S TOTAL STRENGTH: " << totalOppStr << endl;
+    cout << "PLAYER'S TOTAL STRENGTH:   " << totalPlaStr << endl;
+
+    for(int r = 0; r <= 2; r++)
+    {
+      BoardRow row = playerTwoRows[r];
+      rowStrength = row.getRowStr();
+      int maxNumCards = 0;
+      maxNumCards = maxRowSize();
+
+      printRowBorder(maxNumCards);
+      cout << endl;
+      cout <<   ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+      if(r == 2)
+        cout << "^ (P2) Siege         Row Strength: ";
+      else if(r == 1)
+        cout << "^ (P2) Ranged        Row Strength: ";
+      else
+        cout << "^ (P2) Close Combat  Row Strength: ";
+         printf("%3d ", (int)rowStrength);
+      cout <<   " Weather Effect: ";
+      if(r == 2 && row.getDeBuffed())
+      {
+         cout <<   "Rain  ";
+      }
+      else if(r == 1 && row.getDeBuffed())
+      {
+	 cout <<   "Fog   ";
+      }
+      else if(r == 0 && row.getDeBuffed())
+      {
+	 cout <<   "Frost ";
+      }
+      else
+      {
+         cout <<   "NONE  ";
+      }
+      
+      cout <<   " Buff Effect: ";
+      if(row.getBuffed())
+      {
+         cout <<"X2 Multiplier v\n";
+      }
+      else
+      {
+         cout <<"NONE          v\n";
+      }
+      cout <<   "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl << endl;
+      
+      vector<Card*> printCards;
+      for(int c = 0; c < row.cards.size(); c++)
+      {
+         printCards.push_back(row.cards.at(c));
+      }
+      printRow(printCards, 0, (int)printCards.size());
+      printRowBorder(maxNumCards);
+    }
+  }
+}
+}  
