@@ -1,6 +1,6 @@
 #include <cmath>
 
-void Board::displayHand(int p)
+void Board::printHand(int p)
 {
   //Player 1's hand
   if (p == 1)
