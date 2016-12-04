@@ -25,7 +25,7 @@ int Board::maxRowSize(BoardRow *player1, BoardRow *player2)
   return max;
 }
 
-void Board::printRowBoarder(int maxNumCards)
+void Board::printRowBorder(int maxNumCards)
 {
   if(maxNumCards == 0)
   {
