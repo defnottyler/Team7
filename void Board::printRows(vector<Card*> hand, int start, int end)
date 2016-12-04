@@ -4,11 +4,14 @@ void Board::printRow(vector<Card*> hand, int start, int end)
   {
     for(int c = start; c <= end; c++)
     {
-      Card* basic = hand.at(c);
-      if(basic->isUnit)
-        UnitCard* unit = (UnitCard*)hand.at(c);
+      UnitCard* unit = 0;
+      SpecialCard* special = 0;
+
+
+      if(hand.at(c)->isUnit)
+        unit = (UnitCard*)hand.at(c);
       else
-        SpecialCard* special = (SpecialCard*)hand.at(c);
+        special = (SpecialCard*)hand.at(c);
       
       if(l == 1 || l == 8)
       {
@@ -21,15 +24,17 @@ void Board::printRow(vector<Card*> hand, int start, int end)
       }
       else if(l == 3)
       {
+	string n = hand.at(c)->name;
         cout << "  ^ ";
-        printf("%-20s                    ^", basic->name);
+        printf("%-20s                    ^", n.c_str());
       }
       else if(l == 4)
       {
-        if(basic->isUnit)
+        if(hand.at(c)->isUnit)
         {
+	  int s = unit->strength;
           cout << "  ^ Strength: ";
-          printf("%2d          ^", unit->strength);
+          printf("%2p          ^", (void*)s);
         }
         else
         {
@@ -38,20 +43,22 @@ void Board::printRow(vector<Card*> hand, int start, int end)
       }
       else if(l == 5)
       {
-        if(basic->isUnit)
+        if(hand.at(c)->isUnit)
         {
+	  int a = unit->ability;
           cout << "  ^ Ability: ";
-          printf("%d           ^", unit->ability);
+          printf("%p           ^", (void*)a);
         }
         else
         {
+	  int e = special->effect;
           cout << "  ^ Effect: ";
-          printf("%d            ^", special->effect);
+          printf("%p            ^", (void*)e);
         }
       }
       else if(l == 6)
       {
-        if(basic->isUnit)
+        if(hand.at(c)->isUnit)
         {
           if(unit->isHero)
           {
