@@ -4,6 +4,12 @@ void Board::printRow(vector<Card*> hand, int start, int end)
   {
     for(int c = start; c <= end; c++)
     {
+      Card* basic = hand.at(c);
+      if(basic->isUnit)
+        UnitCard* unit = (UnitCard*)hand.at(c);
+      else
+        SpecialCard* special = (SpecialCard*)hand.at(c);
+      
       if(l == 1 || l == 8)
       {
         cout << "  ^**********************^";
@@ -16,23 +22,45 @@ void Board::printRow(vector<Card*> hand, int start, int end)
       else if(l == 3)
       {
         cout << "  ^ ";
-        printf("%-20s                    ^", hand.at(c)->name);
+        printf("%-20s                    ^", basic->name);
       }
       else if(l == 4)
       {
-        cout << "  ^ Strength: ";
-        printf("%2d          ^", hand.at(c)->strength);
+        if(basic->isUnit)
+        {
+          cout << "  ^ Strength: ";
+          printf("%2d          ^", unit->strength);
+        }
+        else
+        {
+          cout << "  ^                      ^";
+        }
       }
       else if(l == 5)
       {
-        cout << "  ^ Ability: ";
-        printf("%d           ^", hand.at(c)->ability);
+        if(basic->isUnit)
+        {
+          cout << "  ^ Ability: ";
+          printf("%d           ^", unit->ability);
+        }
+        else
+        {
+          cout << "  ^ Effect: ";
+          printf("%d            ^", special->effect);
+        }
       }
       else if(l == 6)
       {
-        if(hand.at(c)->isHero)
+        if(basic->isUnit)
         {
-          cout << "  ^ Hero Card            ^";
+          if(unit->isHero)
+          {
+            cout << "  ^ Hero Card            ^";
+          }
+          else
+          {
+            cout << "  ^                      ^";
+          }
         }
         else
         {
