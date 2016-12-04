@@ -12,7 +12,7 @@ class Card
 		const string name;
 		virtual int getStrength() = 0;
 		virtual void setStrength(int s) = 0;
-		virtual string toString() = 0;
+		virtual void toString() = 0;
 };
 
 Card::Card(bool unit, string n)
@@ -30,7 +30,7 @@ class UnitCard: public Card
 		const int ability;
 		const bool isHero;
 		const int strength; //This is the base
-		string toString();
+		void toString();
 	private:
 		int currentStrength;
 };
@@ -51,7 +51,7 @@ void UnitCard::setStrength(int s)
 	currentStrength = s;
 }
 
-string UnitCard::toString()
+void UnitCard::toString()
 {
 	cout <<name<<" "<<type<<" "<<ability<<" "<<isHero<<" "<<strength<<endl;
 }
@@ -63,7 +63,7 @@ class SpecialCard: public Card
 		const int effect;
 		int getStrength();
 		void setStrength(int s);
-		string toString();
+		void toString();
 };
 
 SpecialCard::SpecialCard(int eff, string name)
@@ -81,7 +81,7 @@ void SpecialCard::setStrength(int s)
 	//Polymorphic placeholder
 }
 
-string SpecialCard::toString()
+void SpecialCard::toString()
 {
 	cout <<name<<endl;
 }
