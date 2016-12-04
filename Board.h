@@ -294,18 +294,18 @@ void Board::clearBoard()
 
 void Board::playerOneTurn()
 {
-	if (playerOneHand.size() == 1)
+	 if (playerOneHand.size() == 0)
 	{
 		p1Pass = true;
 		return;
-	}
+	} 
 	int cardIndex;
 	displayTurnOptions(1);
 	cin >> turnOption;
 	if (turnOption == 1) {
 		cout << "Select Card to play: ";
 		cin >> cardIndex;
-		while( cin.fail() || cardIndex < 1 || cardIndex > playerTwoHand.size())
+		while( cin.fail() || cardIndex < 1 || cardIndex > playerOneHand.size())
 		{
 			cout <<"Please choose a card from the numbered list " << endl;
 			printHand(1);
@@ -315,12 +315,12 @@ void Board::playerOneTurn()
 		}
 		playCard(cardIndex - 1, playerOneHand, false);
 		playerTurn = !playerTurn;
-		//cout << "\033[2J\033[1;1H";
+		cout << "\033[2J\033[1;1H";
 	}
 	else if (turnOption == 2){
 		p1Pass = true;
 		playerTurn = !playerTurn;
-		//cout << "\033[2J\033[1;1H";
+		cout << "\033[2J\033[1;1H";
 	}
 	else if (turnOption == 3)
 		printBoard(1);
@@ -331,11 +331,11 @@ void Board::playerOneTurn()
 
 void Board::playerTwoTurn()
 {
-	if (playerTwoHand.size() == 1)
+	if (playerTwoHand.size() == 0)
 	{
 		p2Pass = true;
 		return;
-	}
+	} 
 	int cardIndex;
 	displayTurnOptions(2);
 	cin >> turnOption;
@@ -353,12 +353,12 @@ void Board::playerTwoTurn()
 		
 		playCard(cardIndex - 1, playerTwoHand, true);
 		playerTurn = !playerTurn;
-		//cout << "\033[2J\033[1;1H";
+		cout << "\033[2J\033[1;1H";
 	}
 	else if (turnOption == 2){
 		p2Pass = true;
 		playerTurn = !playerTurn;
-		//cout << "\033[2J\033[1;1H";
+		cout << "\033[2J\033[1;1H";
 	}
 	else if (turnOption == 3){
 		printBoard(2);
@@ -418,7 +418,6 @@ void Board::playCard(int index, vector<Card*> &playerHand, bool pl) {
         switch (ability)
         {
             case 0:
-				cout <<"Bleach\n";
                 for (int i = 0; i < 3; i++)
                 {
                     playerOneRows[i].clear();
@@ -426,17 +425,14 @@ void Board::playCard(int index, vector<Card*> &playerHand, bool pl) {
                 }
                 break;
             case 1:
-				cout <<"Diabetes\n";
                 playerOneRows[0].deBuff();
                 playerTwoRows[0].deBuff();
                 break;
             case 2:
-				cout <<"Waffles\n";
                 playerTwoRows[1].deBuff();
                 playerOneRows[1].deBuff();
                 break;
             case 3:
-				cout <<"Soap\n";
                 playerOneRows[2].deBuff();
                 playerTwoRows[2].deBuff();
                 break;
