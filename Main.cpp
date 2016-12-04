@@ -6,7 +6,7 @@ using namespace std;
 
 int main()
 {	
-	string yesOrNo = "j";
+	string yesOrNo = "";
 	bool play = true;
 	while(play){
 	cout << "\033[2J\033[1;1H"; //Magic terminal eraser
@@ -39,17 +39,6 @@ int main()
 	cout << "Play again?\n" << "y/n" << endl;
 	
 	cin >> yesOrNo;
-	//yesOrNo = toLowerCase(yesOrNo));
-	
-	/*while (yesOrNo != 'y' || yesOrNo != 'n' || cin.fail() )
-	{
-		cout << yesOrNo << "\n";
-		cout << "please enter y for yes or n for no" << endl;
-		cin.clear();
-		cin.ignore(256,'\n');
-		cin >> yesOrNo;
-		putchar (tolower(yesOrNo));
-	} */
 	if (yesOrNo == "n" || yesOrNo == "N")
 		{
 			play = false;

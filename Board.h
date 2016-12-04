@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include <unistd.h>
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -10,6 +11,7 @@
 #include <ctime>
 #include "Cards.h"
 #include "BoardRow.h"
+#include "Help.h"
 //#include "UnitCard.h"
 //#include "SpecialCard.h"
 //No longer blows up on compilation.
@@ -18,32 +20,38 @@ using namespace std;
 class Board
 {
 public:
-	public:
-	Board(); //Constructor starts entire game and configures board.
+	//Constructor starts entire game and configures board.
+	Board(); 
+	
+	//Randomly assign 10 cards to player's hand.
 	void handGenerator();
+	
+	//Gaming logic variables and functions.
 	bool chooseTurn();
-	void printHand(int p);
-	void printBoard(int p);
 	void playRound(int &p1Score, int &p2Score);
 	void playerOneTurn();
 	void playerTwoTurn();
 	void playCard(int index, vector<Card*> &playerHand, bool pl); //Puts a card on the field and changes player's turn
+	
+	//Printing ralated functions.
 	void displayTurnOptions(int playerTurn);
-	void printRow(vector<Card*> hand, int start, int end);
-	//void startGame();
-	//void startRound(); //Called at start of each round
-	//void endOfRound(); //Called when both players pass/run out of cards. Compares strength
-	//void endOfGame(); //Called when one or both player's points hit zero
-	//void printBoard();
+	void printRow(vector<Card*> hand, int start, int end);	
+	void printHand(int p);
+	void printBoard(int p);
 private:
+	//Gaming board ralated variables.
 	BoardRow playerOneRows[3];
 	BoardRow playerTwoRows[3];
+	
+	//Card pointers that point to the deck, hand, and grave.
 	vector<Card*> playerOneDeck;
 	vector<Card*> playerTwoDeck;
 	vector<Card*> playerOneHand;
 	vector<Card*> playerTwoHand;
 	vector<Card*> playerOneGrave;
 	vector<Card*> playerTwoGrave;
+	
+	//Gaming logic variables.
 	int p1TotalStrength;
 	int p2TotalStrength;
 	int boardMod;
@@ -54,19 +62,24 @@ private:
 	bool p1Pass;
 	bool p2Pass;
 	int turnOption;
+	
+	//Gaming logic functions.
 	void initializeDecks(string filename, bool p);
 	void ability4(bool pl);
     void moraleBoost(bool pl, int row);
     void spy(bool pl);
     void medic(bool pl);
     void scorch(bool pl, int row);
-    void clearBoard();
+	void clearBoard();
 };
 
+/*
+ * Constructor initializes all class objects/values.
+ * This includes loading the decks from text files
+ * and creating player hands.
+ */
 Board::Board()
-
 {
-int n = 0;
 	for (int i = 0; i < 3; i++)
 	{
 
@@ -82,10 +95,17 @@ int n = 0;
 
 	initializeDecks("PlayerOneDeck.txt", true);
 	initializeDecks("PlayerTwoDeck.txt", false);
-	cout << "Loading Decks from Cards.txt" << endl;
 	handGenerator();
 }
 
+/*
+ * Reads the text files containing the cards to be used in the game for
+ * each player. The decks do not need to be identical in contents, but
+ * they must be identical in size. Also note that the input from the text
+ * files is not considered user input and not validated. If there is something
+ * wrong in the text files, the program will not run. For information on on the
+ * format of cards in the text file, see card_example.txt
+ */
 void Board::initializeDecks(string filename, bool p)
 {
 	ifstream d_one(filename);
@@ -144,7 +164,11 @@ void Board::initializeDecks(string filename, bool p)
 	d_one.close();
 }
 
-void Board::handGenerator()			//puts cards from deck into player hand(s)
+/*
+ * Called in the constructor to randomly assign 10 cards from the decks to 
+ * the players' hands at the beginning of the match. 
+ */
+void Board::handGenerator()			
 {
 	srand(time(NULL));
 
@@ -180,31 +204,53 @@ void Board::handGenerator()			//puts cards from deck into player hand(s)
 	
 	//cout << "Hand generator is fine!" << endl; 
 }
-//bools and stuff
+
+/*
+ * Decides which player will go first. This can be 
+ * equated to a coin toss. 
+ */
 bool Board::chooseTurn()
 {
 	srand(time(NULL));
 	firstTurnChoice = (rand() % 2) + 1;
     if (firstTurnChoice == 1)
+    {
+		cout <<"Player One has won the coin toss and will go first.\n";
+		sleep(3);
         return true;
+	}
     else
+    {
+		cout <<"Player Two has won the coin toss and will go first.\n";
+		sleep(3);
         return false;
+	}
 	//return firstTurnChoice;
 }
 
+/*
+ * Prints a prompt for the player
+ */
 void Board::displayTurnOptions(int playerTurn)
 {
 	
 	cout << "Player " << playerTurn << " turn" << endl;
 	cout << "Choose one of the following options:" << endl;
 	cout << "1) Play a card" << endl;
-	cout << "2) Pass turn" << endl;
+	cout << "2) Pass round" << endl;
 	cout << "3) Display game board" << endl;
 	cout << "4) Display hand" << endl;
+	cout << "5) Display help" << endl;
 	cout << "Player Option: ";
 }
 
-
+/*
+ * Main game loop is more or less in this method.
+ * Loops ensures that turns are given to players
+ * when appropriate, considering such factors as
+ * passing a round. Method also clears the board
+ * when the round ends.
+ */
 void Board::playRound(int &p1Score, int &p2Score)
 {
 	int roundWinner;
@@ -253,22 +299,29 @@ void Board::playRound(int &p1Score, int &p2Score)
 	{
 		p1Score++;
 		cout <<"Player one wins the round." <<endl;
+		playerTurn = true;
 	}
 	else if (p1TotalStrength < p2TotalStrength)
 	{
 		p2Score++;
 		cout <<"Player two wins the round." <<endl;
+		playerTurn = false;
 	}
 	else
 	{
 		cout <<"Draw\n";
 		p1Score++;
 		p2Score++;
+		playerTurn = !playerTurn;
 	}
 	clearBoard();
     //round has terminated
 }
 
+/*
+ * Clears the board of all cards, moving them
+ * to grave piles. Also clears all active effects.
+ */
 void Board::clearBoard()
 {
     int p1cards;
@@ -292,6 +345,9 @@ void Board::clearBoard()
     }
 }
 
+/*
+ * Executes player one's turn
+ */
 void Board::playerOneTurn()
 {
 	 if (playerOneHand.size() == 0)
@@ -324,11 +380,15 @@ void Board::playerOneTurn()
 	}
 	else if (turnOption == 3)
 		printBoard(1);
-	else
+	else if (turnOption == 4)
 		printHand(1);
-	
+	else
+		Help::help_menu();
 }
 
+/*
+ * Executes player two's turn
+ */
 void Board::playerTwoTurn()
 {
 	if (playerTwoHand.size() == 0)
@@ -364,12 +424,18 @@ void Board::playerTwoTurn()
 		printBoard(2);
 		
 	}
-	else{
+	else if (turnOption == 4)
+	{
 		printHand(2);
 	}
+	else
+		Help::help_menu();
 }
 
-//Now compiles without error
+/*
+ * Plays a selected card, ensuring that the appropriate action
+ * (ability, row placement, etc.) is undertaken when it is played.
+ */
 void Board::playCard(int index, vector<Card*> &playerHand, bool pl) {
 	int cardRow;
     int ability;
@@ -380,11 +446,13 @@ void Board::playCard(int index, vector<Card*> &playerHand, bool pl) {
 		uCard = (UnitCard*)playerHand.at(index);
         cardRow = uCard->type;
         ability = uCard->ability;
-        if (!pl && ability != 2) //player one
+        if (!pl && ability != 2) //a pl value of false indicates player one
             playerOneRows[cardRow].add(uCard);
         else if (pl && ability != 2)
             playerTwoRows[cardRow].add(uCard);
         playerHand.erase(playerHand.begin() + index);
+        
+        //Switch for unit card abilities. 
         switch (ability)
         {
             case 1:
@@ -402,12 +470,14 @@ void Board::playCard(int index, vector<Card*> &playerHand, bool pl) {
                 break;
             case 4:
                 scorch(pl, cardRow);
+                cout<<"Scorched!\n";
+                sleep(3);
                 break;
         }
         //playerHand.at(index) = NULL;
         //playerHand.erase(playerHand.begin() + index);
 	}
-    else
+    else //Special card detected
     {
         sCard = (SpecialCard*)playerHand.at(index);
         ability = sCard->effect;
@@ -416,6 +486,8 @@ void Board::playCard(int index, vector<Card*> &playerHand, bool pl) {
             playerOneGrave.push_back(sCard);
         else
             playerTwoGrave.push_back(sCard);
+            
+        //Switch statement for special card abilities
         switch (ability)
         {
             case 0:
@@ -445,6 +517,10 @@ void Board::playCard(int index, vector<Card*> &playerHand, bool pl) {
     
 }
 
+/*
+ * Applies 4th special ability, which is the doubling
+ * of non hero row strength
+ */
 void Board::ability4(bool pl)
 {
     int row;
@@ -464,14 +540,22 @@ void Board::ability4(bool pl)
         playerTwoRows[row].buff();
 }
 
+/*
+ * Activates morale boost in appropriate BoardRow
+ */
 void Board::moraleBoost(bool pl, int row)
 {
     if (!pl)
-        playerOneRows[row].moraleBoost();
+        playerOneRows[row].addMorale();
     else
-        playerTwoRows[row].moraleBoost();
+        playerTwoRows[row].addMorale();
 }
 
+/*
+ * Activates spy ability, placing a card in the
+ * other player's row and randomly drawing two cards
+ * from the player's deck to be placed in their hand.
+ */
 void Board::spy(bool pl)
 {
     srand(time(NULL));
@@ -497,6 +581,10 @@ void Board::spy(bool pl)
     }
 }
 
+/*
+ * Activates the medic ability, resurrecting a non-hero,
+ * non special card of the player's choice.
+ */
 void Board::medic(bool pl) 
 {
 	UnitCard *card;
@@ -579,6 +667,10 @@ void Board::medic(bool pl)
 	}
 }
 
+/*
+ * Activates the scorch ability, destroying the highest strength
+ * card(s) in the corresponding row of the other player.
+ */
 void Board::scorch(bool pl, int row)
 {
     int maxStrength = 0;
