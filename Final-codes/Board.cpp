@@ -243,12 +243,14 @@ void Board::clearBoard()
         p1cards = playerOneRows[i].cards.size();
         for (int j = 0; j < p1cards; j++)
         {
+	    playerOneRows[i].cards.front()->setStrength(playerOneRows[i].cards.front()->strength);
             playerOneGrave.push_back(playerOneRows[i].cards.front());
             playerOneRows[i].cards.erase(playerOneRows[i].cards.begin());
         }
         p2cards = playerTwoRows[i].cards.size();
         for (int j = 0; j < p2cards; j++)
         {
+	    playerTwoRows[i].cards.front()->setStrength(playerTwoRows[i].cards.front()->strength);
             playerTwoGrave.push_back(playerTwoRows[i].cards.front());
             playerTwoRows[i].cards.erase(playerTwoRows[i].cards.begin());
         }
