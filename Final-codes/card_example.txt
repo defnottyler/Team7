@@ -3,14 +3,15 @@ Card format in text file:
 
 Example:
 
-true Poor_Infantry 1 0 0 false
+true Poor_Infantry 1 0 0 0
 
 This card is a unit card with the name "Poor_Infantry", a strength
-of one, close range, no ability, and is not a hero card.
+of one, close range, no ability, and is not a hero card. Hero cards
+are denoted by a 1 instead of a zero for the last field.
 
 A special card would look like this:
 
-false name ability
+false [name] [ability]
 
 special card abilities:
 0 = clear entire board
