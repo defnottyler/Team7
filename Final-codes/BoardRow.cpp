@@ -82,7 +82,7 @@ void BoardRow::deBuff()
         rowStrength += cards.at(i)->getStrength();
     }
     deBuffed = true;
-    if (morale >= 1)
+    if (morale != 0)
 		moraleBoost();
 }
 
@@ -108,12 +108,12 @@ void BoardRow::buff()
         else if (!cards.at(i)->isHero && deBuffed)
         {
             cards.at(i)->setStrength(2);
-            if (morale >= 1)
-				moraleBoost();
 		}
         rowStrength += cards.at(i)->getStrength();
     }
     buffed = true;
+	if (morale >= 1)
+		moraleBoost();
 }
 
 /*
@@ -143,7 +143,7 @@ void BoardRow::moraleBoost()
 			else
 				c->setStrength(c->strength + morale);
 		}
-        else if (!c->isHero && (!buffed || deBuffed) && c->ability == 1)
+        if (!c->isHero && (!buffed || deBuffed) && c->ability == 1)
         {
 			//cout <<"B\n";
 			if (deBuffed)
@@ -151,16 +151,22 @@ void BoardRow::moraleBoost()
 			else
 				c->setStrength(c->strength + (morale - 1));
 		}
-        else if (!c->isHero && buffed && c->ability != 1)
+        if (!c->isHero && buffed && c->ability != 1)
         {
 			//cout <<"C\n";
-            c->setStrength(c->strength * 2 + (2 * morale));
+		if (deBuffed)
+			c->setStrength(2 + morale);
+		else
+            		c->setStrength(c->strength * 2 + (2 * morale));
 		}
-        else if (!c->isHero && buffed && c->ability == 1)
+        if (!c->isHero && buffed && c->ability == 1)
         {
 			//cout <<"D\n";
-			c->setStrength(c->strength * 2 + (2 * morale - 2));
-		}
+		if (deBuffed)
+			c->setStrength(2 + (morale - 1));
+		else
+			c->setStrength(c->strength * 2 + ((2 * morale) - 2));
+	}
     }
 }
 

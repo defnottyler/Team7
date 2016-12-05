@@ -9,6 +9,7 @@
 #include <fstream>
 #include <string>
 #include <ctime>
+//#include <cctype>
 #include "Cards.h"
 #include "BoardRow.h"
 #include "Help.h"

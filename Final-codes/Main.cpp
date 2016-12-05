@@ -87,7 +87,12 @@ int main()
 			if (p2Score == 2)
 			{
 				++p2GamePoints;	
-			}	
+			}
+			if (p2Score == 2 && p1Score == 2)
+			{
+				p2GamePoints--;
+				p1GamePoints--;
+			}
 		}
 		
 		//Help File

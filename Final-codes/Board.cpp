@@ -460,6 +460,12 @@ void Board::ability4(bool pl)
     {
         cout <<"Which row do you want to rally (1, 2, or 3)?\n";
         cin >>row;
+	if (cin.fail())
+	{
+		cin.clear();
+		cin.ignore(256,'\n');
+		continue;
+	}
         if (row < 1 || row > 3)
             cout <<"Invalid input, try again.\n";
         else
@@ -570,7 +576,14 @@ void Board::medic(bool pl)
 			{
 				cout <<i+1<<". "<<playerTwoGrave.at(i)->name<<endl;
 			}
-			cin >>choice; choice--;
+			cin >>choice; 
+			if (cin.fail())
+			{
+				cin.clear();
+				cin.ignore(256,'\n');
+				continue;
+			}
+			choice--;
 			if (choice < 0 || choice > playerTwoGrave.size() - 1)
 			{
 				cout <<"Invalid choice, try again.\n";
@@ -610,15 +623,16 @@ void Board::scorch(bool pl, int row)
     {
         for (UnitCard *c : playerTwoRows[row].cards)
         {
-            if (c->getStrength() > maxStrength)
+            if (c->getStrength() > maxStrength && !c->isHero)
                 maxStrength = c->getStrength();
         }
         for (int i = 0; i < playerTwoRows[row].cards.size(); i++)
         {
-            if (playerTwoRows[row].cards.at(i)->getStrength() == maxStrength)
+            if (playerTwoRows[row].cards.at(i)->getStrength() == maxStrength && !playerTwoRows[row].cards.at(i)->isHero)
             {
                 playerTwoGrave.push_back(playerTwoRows[row].cards.at(i));
                 playerTwoRows[row].cards.erase(playerTwoRows[row].cards.begin() + i);
+		i--;
             }
         }
     }
@@ -626,15 +640,16 @@ void Board::scorch(bool pl, int row)
     {
         for (UnitCard *c : playerOneRows[row].cards)
         {
-            if (c->getStrength() > maxStrength)
+            if (c->getStrength() > maxStrength && !c->isHero)
                 maxStrength = c->getStrength();
         }
         for (int i = 0; i < playerOneRows[row].cards.size(); i++)
         {
-            if (playerOneRows[row].cards.at(i)->getStrength() == maxStrength)
+            if (playerOneRows[row].cards.at(i)->getStrength() == maxStrength && !playerOneRows[row].cards.at(i)->isHero)
             {
                 playerOneGrave.push_back(playerOneRows[row].cards.at(i));
                 playerOneRows[row].cards.erase(playerOneRows[row].cards.begin() + i);
+		i--;
             }
         }
     }
@@ -675,12 +690,38 @@ void Board::printRow(vector<Card*> hand, int start, int end)
         cout << "  ^";
         if(hand.at(c)->isUnit && unit->isHero)
         {
-	      printf(" (Hero)            %2d ^", c + 1);
+	      if(unit->type == 0)
+              {
+	         printf(" (Hero)  Close     %2d ^", c + 1);
+              }
+	      if(unit->type == 1)
+	      {
+	         printf(" (Hero)  Ranged    %2d ^", c + 1);
+	      }
+	      if(unit->type == 2)
+	      {
+		 printf(" (Hero)  Siege     %2d ^", c + 1);
+	      }
+        }
+        else if(hand.at(c)->isUnit)
+        {
+	      if(unit->type == 0)
+	      {
+          	 printf("         Close     %2d ^", c + 1);
+	      }
+	      if(unit->type == 1)
+	      {
+          	 printf("         Ranged    %2d ^", c + 1);
+	      }
+	      if(unit->type == 2)
+	      {
+          	 printf("         Siege     %2d ^", c + 1);
+	      }
         }
         else
-        {
-          printf("                   %2d ^", c + 1);
-        }
+	{
+              printf("                   %2d ^", c + 1);
+	}
       }
       //Prints the 3rd line of each card which contains the name
       else if(l == 3)
@@ -696,7 +737,7 @@ void Board::printRow(vector<Card*> hand, int start, int end)
       {
         if(hand.at(c)->isUnit)
         {
-	      int s = unit->strength;
+	      int s = unit->getStrength();
           cout << "  ^ Strength: ";
           printf("%2d         ^", (int)s);
         }
@@ -706,12 +747,19 @@ void Board::printRow(vector<Card*> hand, int start, int end)
           cout << "  ^ Effect: ";
           if(e != 4)
           {
-			  cout << "Debuff       ^";
-		  }
-		  else
+	       if(e == 0)
+	       {
+		   cout << "Clear        ^";
+               }
+               else
+	       {
+	           cout << "Debuff       ^";
+	       }
+          }
+          else
           {
-			  cout << "X2 Strength  ^";
-		  }
+	       cout << "X2 Strength  ^";
+          }
         }
       }
       //Prints out the 5th line for each card
@@ -749,7 +797,11 @@ void Board::printRow(vector<Card*> hand, int start, int end)
 	  if(special->effect != 4)
           {
 	    cout << "  ^ Row: ";
-            if(special->effect == 1)
+	    if(special->effect == 0)
+	    {
+	       cout << "Board Wide      ^";
+	    }
+            else if(special->effect == 1)
             {
 	       cout << "Both Close      ^";
             }
