@@ -58,7 +58,6 @@ void Help::help_menu()
 			cout << "\t       field(no Heroes or Special)\n";
 			cout << "\tScorch- Destroys all cards with highest strength value in opponent's \n";
 			cout << "\t        corresponding row.\n" << endl;
-			//cout << "\tTight Bond- If two or more cards of the same card are in the same row, their strength is doubled\n" << endl;
 
 			//Explanation of Special Card abilities
 			cout << "Special Cards can be sorted into two categories:\n";
@@ -76,7 +75,6 @@ void Help::help_menu()
 
 void Help::print_menu_options()
 {
-	//cout << "-------HELP MENU-------" << endl;
 	string title = "HELP MENU";
 	string s = title;
 	center_align(s);
@@ -214,7 +212,6 @@ void Help::tips()
 	cout << "\t       field(no Heroes or Special)\n";
 	cout << "\tScorch- Destroys card(s) with highest strength value in opponent's \n";
 	cout << "\t        corresponding row.\n" << endl;
-	//cout << "\tTight Bond- If two or more cards of the same card are in the same row, their strength is doubled\n" << endl;
 
 	//Explanation of Special Card abilities
 	cout << "Special Cards can be sorted into two categories:\n";
