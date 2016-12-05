@@ -43,7 +43,7 @@ void Board::initializeDecks(string filename, bool p)
 	int index = 5;
 	while (getline(d_one, line))
 	{ 
-		if (line.substr(0, 4).compare("true") == 0)
+		if (line.substr(0, 4).compare("true") == 0) //Unit Card
 		{
 			index = line.find(" ", 5);
 			name = line.substr(5, index - 5);
@@ -73,7 +73,7 @@ void Board::initializeDecks(string filename, bool p)
 			}
 
 		}
-		else
+		else //Special Card
 		{
 
 			index = line.find(" ", 6);
@@ -106,32 +106,17 @@ void Board::handGenerator()
 
 	int index1;
 	int index2;
-	//cout <<"Before loop\n";
 	for (int i = 0; i<10; i++) {
-		//cout <<"Start of loop\n";
-		//cout << deckSize1 << endl;
 		index1 = (int)(rand() % deckSize1);
-		//cout << "too fast" << endl;
-		//index2 = (int)(rand() % deckSize2);
-		//cout <<"After rand\n";
 		index2 = (int)(rand() % deckSize2);
-		//cout << "index is " << index1 << endl;
-		//cout << "playerOneHand.size() is " << playerOneHand.size() << endl;
-		//cout << "playerOneDeck.size() is " << playerOneDeck.size() << endl;
 		playerOneHand.push_back(playerOneDeck.at(index1));
 		playerOneDeck.erase(playerOneDeck.begin() + index1);
 		deckSize1--;
-		//cout << "index is " << index1 << endl;
-		//cout << "playerTwoHand.size() is " << playerTwoHand.size() << endl;
-		//cout << "playerTwoDeck.size() is " << playerTwoDeck.size() << endl;
 		playerTwoHand.push_back(playerTwoDeck.at(index2));
 		playerTwoDeck.erase(playerTwoDeck.begin() + index2);
 		deckSize2--;
-		//cout <<"End of loop\n";
-		//hands are now generated
 	}
 	
-	//cout << "Hand generator is fine!" << endl; 
 }
 
 /*
@@ -154,7 +139,6 @@ bool Board::chooseTurn()
 		sleep(1);
         return false;
 	}
-	//return firstTurnChoice;
 }
 
 /*
@@ -192,10 +176,6 @@ void Board::playRound(int &p1Score, int &p2Score)
 	}
 
 	do {
-		/*if (playerOneHand.size() == 0)
-			p1Pass = true;
-		if (playerTwoHand.size() == 0)
-			p2Pass = true; */
 		if (playerTurn) {
 			playerOneTurn(p1Score, p2Score);
 		}
@@ -282,6 +262,7 @@ void Board::clearBoard()
  */
 void Board::playerOneTurn(int &p1, int &p2)
 {
+	//Auto pass if out of cards
 	 if (playerOneHand.size() == 0)
 	{
 		p1Pass = true;
@@ -323,6 +304,7 @@ void Board::playerOneTurn(int &p1, int &p2)
  */
 void Board::playerTwoTurn(int &p1, int &p2)
 {
+	//Auto pass if out of cards
 	if (playerTwoHand.size() == 0)
 	{
 		p2Pass = true;
@@ -614,7 +596,8 @@ void Board::medic(bool pl)
 
 /*
  * Activates the scorch ability, destroying the highest strength
- * card(s) in the corresponding row of the other player.
+ * card(s) in the corresponding row of the other player. Heroes
+ * are not considered.
  */
 void Board::scorch(bool pl, int row)
 {
@@ -1271,160 +1254,3 @@ void Board::printBoard(int p, int p1Score, int p2Score)
 }
 }
 
-/*
-void Board::printBoard(int p)
-{
-	if(p==1){
-		cout<<"~~~~~~~~~~~~GAMING BOARD~~~~~~~~~~~~\n";
-		cout<<"~~~~Other player's Siege cards: ~~~~\n";
-		//display playerTwoRows[2]
-		for (int k=0; k < playerTwoRows[2].cards.size(); k++){
-		playerTwoRows[2].cards.at(k)->toString();
-		}
-		cout<<"~~~~Other player's Ranged cards: ~~~~\n";
-		//display playerTwoRows[1]
-		for (int k=0; k < playerTwoRows[1].cards.size(); k++){
-		playerTwoRows[1].cards.at(k)->toString();
-		}
-		cout<<"~Other player's Close Combat cards: ~\n";
-		//display playerTwoRows[0]
-		for (int k=0; k < playerTwoRows[0].cards.size(); k++){
-		playerTwoRows[0].cards.at(k)->toString();
-		}
-		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		cout<<"Your Close Combat cards: \n";
-		//display playerOneRows[0]
-		for (int k=0; k < playerOneRows[0].cards.size(); k++){
-		playerOneRows[0].cards.at(k)->toString();
-		}
-		cout<<"Your Ranged cards: \n";
-		//display playerOneRows[1]
-		for (int k=0; k < playerOneRows[1].cards.size(); k++){
-		playerOneRows[1].cards.at(k)->toString();
-		}
-		cout<<"Your Siege cards: \n";
-		//display playerOneRows[2]
-		for (int k=0; k < playerOneRows[2].cards.size(); k++){
-		playerOneRows[2].cards.at(k)->toString();
-		}
-		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		cout<<"Your hand: (Name/Type/Abilit/isHero/Strength)\n";
-		
-	}
-	else{
-		cout<<"~~~~~~~~~~~~GAMING BOARD~~~~~~~~~~~~\n";
-		cout<<"~~~~Other player's Siege cards: ~~~~\n";
-		//display playerOneRows[2]
-		for (int k=0; k < playerOneRows[2].cards.size(); k++){
-		playerOneRows[2].cards.at(k)->toString();
-		}
-		cout<<"~~~~Other player's Ranged cards: ~~~~\n";
-		//display playerOneRows[1]
-		for (int k=0; k < playerOneRows[1].cards.size(); k++){
-		playerOneRows[1].cards.at(k)->toString();
-		}
-		cout<<"~Other player's Close Combat cards: ~\n";
-		//display playerOneRows[0]
-		for (int k=0; k < playerOneRows[0].cards.size(); k++){
-		playerOneRows[0].cards.at(k)->toString();
-		}
-		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		cout<<"~~~~~Your Close Combat cards: ~~~~~~\n";
-		//display playerTwoRows[0]
-		for (int k=0; k < playerTwoRows[0].cards.size(); k++){
-		playerTwoRows[0].cards.at(k)->toString();
-		}
-		cout<<"~~~~~~~~Your Ranged cards: ~~~~~~~~~\n";
-		//display playerTwoRows[1]
-		for (int k=0; k < playerTwoRows[1].cards.size(); k++){
-		playerTwoRows[1].cards.at(k)->toString();
-		}
-		cout<<"~~~~~~~~~Your Siege cards: ~~~~~~~~~\n";
-		//display playerTwoRows[2]
-		for (int k=0; k < playerTwoRows[2].cards.size(); k++){
-		playerTwoRows[2].cards.at(k)->toString();
-		}
-		cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		cout<<"Your hand: (Name/Type/Abilit/isHero/Strength)\n";
-		
-	}
-}
-
-/*
-void Board::printRow(vector<Card*> hand, int start, int end)
-{
-  for(int l = 0; l <= 8 ; l++)
-  {
-    for(int c = start; c <= end; c++)
-    {
-      if(l == 1 || l == 8)
-      {
-        cout << "  ^**********************^";
-      }
-      else if(l == 2)
-      {
-        cout << "  ^";
-        printf("                      %2d^", c);
-      }
-      else if(l == 3)
-      {
-        cout << "  ^ ";
-        printf("%-20s                    ^", hand.at(c)->name);
-      }
-      else if(l == 4)
-      {
-        cout << "  ^ Strength: ";
-        printf("%2d          ^", hand.at(c)->strength);
-      }
-      else if(l == 5)
-      {
-        cout << "  ^ Ability: ";
-        printf("%d           ^", hand.at(c)->ability);
-      }
-      else if(l == 6)
-      {
-        if(hand.at(c)->isHero)
-        {
-          cout << "  ^ Hero Card            ^";
-        }
-        else
-        {
-          cout << "  ^                      ^";
-        }
-      }
-      else if(l == 7)
-      {
-        cout << "  ^                      ^";
-      }
-    }
-    cout << endl;
-  }
-  cout << endl;
-}
-
-void Board::printHand(int p)
-{
-	cout << "-------HAND-------" << endl; 
-	int cardNumberOne = 0;
-	int cardNumberTwo = 0;
-	if (p == 1) 
-	{
-		
-		
-		for (int i = 0; i < playerOneHand.size(); ++i) {
-			cardNumberOne++;
-			cout << cardNumberOne << " ";
-			playerOneHand.at(i)->toString();
-		}
-	}
-	else
-	{
-		for (int i = 0; i < playerTwoHand.size(); ++i) {
-			cardNumberTwo++;
-			cout << cardNumberTwo << " ";
-			playerTwoHand.at(i)->toString();
-		}
-	}
-	cout << "------------------" << endl; 
-}
-*/
