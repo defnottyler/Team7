@@ -54,7 +54,6 @@ void BoardRow::clear()
             cards.at(i)->setStrength(cards.at(i)->strength);
         rowStrength += cards.at(i)->getStrength();
     }
-    //buffed = false;
     deBuffed = false;
     if (buffed)
 		buff();
@@ -128,16 +127,14 @@ void BoardRow::buff()
  * Applies moraleBoost effect. Method attempts to address all cases
  * with a boost. Note that cards with the ability do not apply it to
  * themselves. Also, note that a debuff overrides a buff during a boost.
+ * Morale boosts can stack with each other. 
  */
 void BoardRow::moraleBoost()
 {
-	//morale++;
-	//cout <<morale<<endl;
     for (UnitCard *c : cards)
     {
         if (!c->isHero && (!buffed || deBuffed) && c->ability != 1)
         {
-			//cout <<"A\n";
 			if (deBuffed)
 				c->setStrength(1 + morale);
 			else
@@ -145,7 +142,6 @@ void BoardRow::moraleBoost()
 		}
         if (!c->isHero && (!buffed || deBuffed) && c->ability == 1)
         {
-			//cout <<"B\n";
 			if (deBuffed)
 				c->setStrength(1 + (morale - 1));
 			else
@@ -153,7 +149,6 @@ void BoardRow::moraleBoost()
 		}
         if (!c->isHero && buffed && c->ability != 1)
         {
-			//cout <<"C\n";
 		if (deBuffed)
 			c->setStrength(2 + morale);
 		else
@@ -161,7 +156,6 @@ void BoardRow::moraleBoost()
 		}
         if (!c->isHero && buffed && c->ability == 1)
         {
-			//cout <<"D\n";
 		if (deBuffed)
 			c->setStrength(2 + (morale - 1));
 		else
