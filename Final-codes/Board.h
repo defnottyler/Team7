@@ -1,5 +1,3 @@
-//#ifndef
-//#def SOMENAME
 
 #include <cmath>
 #include <algorithm>
@@ -9,13 +7,9 @@
 #include <fstream>
 #include <string>
 #include <ctime>
-//#include <cctype>
 #include "Cards.h"
 #include "BoardRow.h"
 #include "Help.h"
-//#include "UnitCard.h"
-//#include "SpecialCard.h"
-//No longer blows up on compilation.
 using namespace std;
 
 class Board
