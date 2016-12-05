@@ -648,10 +648,10 @@ void Board::printRow(vector<Card*> hand, int start, int end)
   //Iterates through the "height" of the cards, adding in the appropriate elements per line
   for(int l = 0; l <= 6 ; l++)
   {
-	//Prints out a the "l'th" line for each card in the row
+    //Prints out a the "l'th" line for each card in the row
     for(int c = start; c < end; c++)
     {
-	  //Placeholder variables for the two different card types
+      //Placeholder variables for the two different card types
       UnitCard* unit = 0;
       SpecialCard* special = 0;
 
@@ -667,7 +667,8 @@ void Board::printRow(vector<Card*> hand, int start, int end)
         cout << "  ^**********************^";
       }
       //Prints the 2nd line which labels the card "Hero" if it is a Hero card
-      //Also lists the card number for selection purposes
+      //Also lists the card number for selection purposes and the row
+      //that the card will be played in if the type is UnitCard*
       else if(l == 2)
       {
         cout << "  ^";
@@ -747,7 +748,7 @@ void Board::printRow(vector<Card*> hand, int start, int end)
       }
       //Prints out the 5th line for each card
       //Contains Ability for UnitCard types (medic, scorch, spy, morale booster)
-      //Contains Effected row(s) for SpecialCard types(Both Close/Ranged/Siege, Any Player Row)
+      //Contains Effected row(s) for SpecialCard types(Both Close/Ranged/Siege, Board Wide, Any Player Row)
       else if(l == 5)
       {
         if(hand.at(c)->isUnit)
@@ -992,7 +993,16 @@ void Board::printRowBorder(int max)
 }
 
 /*
- * 
+ * Displays a representation of the playing board depending on the player viewing it.
+ * The board is printed out with the following general format:
+ *         [Score]
+ *         [Opponent Siege Row]
+ *         [Opponent Ranged Row]
+ *         [Opponent Close Combat Row]
+ *         [Total Scores]
+ *         [Player Close Combat Row]
+ *         [Player Ranged Row]
+ *         [Player Siege Row]
  */
 void Board::printBoard(int p, int p1Score, int p2Score)
 {
@@ -1253,4 +1263,3 @@ void Board::printBoard(int p, int p1Score, int p2Score)
   }
 }
 }
-
